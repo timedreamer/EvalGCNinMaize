@@ -40,10 +40,7 @@ sample_name <- rownames(y$samples)
 # bargraph show library size
 lib_size <- sort(y$samples$lib.size,decreasing = FALSE)
 mp <- barplot(lib_size*1e-6,ylab="Library size(millions)") # bargraph show library size
-
-
 abline(h=5,col="red") # this is lib size after remove a lot genes.
-
 
 # Get gene length of filtered genes that can be used to count RPKM.
 gene_name <- as.vector(y$genes$genes) # updated gene names

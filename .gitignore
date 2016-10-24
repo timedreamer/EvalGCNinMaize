@@ -32,7 +32,8 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
-# Excel and csvfiles
+# Excel,csv and tab-delimited txt files
 *.xlsx
 *.xls
 *.csv
+*.txt
