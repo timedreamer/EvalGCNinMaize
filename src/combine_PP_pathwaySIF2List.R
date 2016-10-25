@@ -17,7 +17,7 @@ PTY_SIF <- read.delim("Pathway_network_cpm.SIF",header=F,sep="\t")
 P_combine <- rbind(PP_SIF,PTY_SIF)
 P_combine <- P_combine[order(P_combine$V1),]
 
-# choose Genes that have more than 71 genes connected. 1777 genes left
+# choose Genes that have more than 5 genes connected.
 length(which(table(P_combine$V1)>=5))
 fivenum(table(P_combine$V1))
 P_new_combine <- P_combine[!(as.numeric(P_combine$V1)) %in% which(table(P_combine$V1)<5),]
