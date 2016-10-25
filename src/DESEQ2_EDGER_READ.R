@@ -23,16 +23,12 @@ raw_data  <- read.delim("ALL_FC_noDuplicateLib_biggerThan5Million_70allignmentRa
 
 # delete unused columns
 raw_data[2:5] <- NULL
-ncol(raw_data) # first column is the geneid
 
 # read to DGEList. Data filteration
 gene_name <- unname(raw_data$Geneid)
-ncol(raw_data) # 1268
 y <- DGEList(counts = raw_data[3:1268],genes = gene_name)
 keep <- rowSums(cpm(y)>2) >= 1000  # only keep some expressed data
-table(keep)
 y <- y[keep,,keep.lib.size=FALSE]
-head(y$genes)
 # Do the normalization
 y <- calcNormFactors(y)
 sample_name <- rownames(y$samples)

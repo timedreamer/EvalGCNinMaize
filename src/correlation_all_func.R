@@ -8,7 +8,8 @@
 # bicor use WGCNA
 # AA, MA, MRNET and CLR use parmigene.
 
-# adjacencymatrix needs rowname and colname in order to calculate.
+# adjacencymatrix() needs rowname and colname in order to calculate.
+# tested with cpm data on 3077 linux, without GCC, took 43823 s.
 
 library(rsgcc)
 library(pcaPP)
