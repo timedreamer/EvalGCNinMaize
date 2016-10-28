@@ -1,4 +1,7 @@
-
+# This script is to calculate AUC for Protein-protein and Pathway database.
+# 4704 node_name means I used all genes with more than 5 interactions in the following analysis.
+# I also tries 1777 node, which used genes with more than 71 intereactions.
+# Final results are very similar, but 4704 gave a little bit higher mean AUC numbers.(0.1,0.2 higher)
 
 library(ROCR)
 
@@ -164,27 +167,22 @@ save(list=c(paste0("auc_rpkm_",method)),file="AUC_rpkm.RData")                  
 ##############################################################################################################################
 
 
-# organize result. combine all results together.
-#mean
-auc_vst_all_mean <- c(mean(auc_vst_pcc),mean(auc_vst_scc),mean(auc_vst_gcc),mean(auc_vst_kcc),mean(auc_vst_bicor),
-                 mean(auc_vst_aa),mean(auc_vst_ma),mean(auc_vst_mrnet),mean(auc_vst_clr))
-auc_cpm_all_mean <- c(mean(auc_cpm_pcc),mean(auc_cpm_scc),mean(auc_cpm_gcc),mean(auc_cpm_kcc),mean(auc_cpm_bicor),
-                 mean(auc_cpm_aa),mean(auc_cpm_ma),mean(auc_cpm_mrnet),mean(auc_cpm_clr))
-auc_rc_all_mean <- c(mean(auc_rc_pcc),mean(auc_rc_scc),mean(auc_rc_gcc),mean(auc_rc_kcc),mean(auc_rc_bicor),
-                 mean(auc_rc_aa),mean(auc_rc_ma),mean(auc_rc_mrnet),mean(auc_rc_clr))
-auc_rpkm_all_mean <- c(mean(auc_rpkm_pcc),mean(auc_rpkm_scc),mean(auc_rpkm_gcc),mean(auc_rpkm_kcc),mean(auc_rpkm_bicor),
-                 mean(auc_rpkm_aa),mean(auc_rpkm_ma),mean(auc_rpkm_mrnet),mean(auc_rpkm_clr))
+# organize result. combine all results together. MEAN.
+# the previous results are lists, need to unlist() first then calcualate mean value.
+auc_vst_all_mean <- c(mean(unlist(auc_vst_pcc)),mean(unlist(auc_vst_scc)),mean(unlist(auc_vst_gcc)),mean(unlist(auc_vst_kcc)),mean(unlist(auc_vst_bicor)),
+                      mean(unlist(auc_vst_aa)),mean(unlist(auc_vst_ma)),mean(unlist(auc_vst_mrnet)),mean(unlist(auc_vst_clr)))
 
-#median
-auc_vst_all_median <- c(median(auc_vst_pcc),median(auc_vst_scc),median(auc_vst_gcc),median(auc_vst_kcc),median(auc_vst_bicor),
-                      median(auc_vst_aa),median(auc_vst_ma),median(auc_vst_mrnet),median(auc_vst_clr))
-auc_cpm_all_median <- c(median(auc_cpm_pcc),median(auc_cpm_scc),median(auc_cpm_gcc),median(auc_cpm_kcc),median(auc_cpm_bicor),
-                      median(auc_cpm_aa),median(auc_cpm_ma),median(auc_cpm_mrnet),median(auc_cpm_clr))
-auc_rc_all_median <- c(median(auc_rc_pcc),median(auc_rc_scc),median(auc_rc_gcc),median(auc_rc_kcc),median(auc_rc_bicor),
-                     median(auc_rc_aa),median(auc_rc_ma),median(auc_rc_mrnet),median(auc_rc_clr))
-auc_rpkm_all_median <- c(median(auc_rpkm_pcc),median(auc_rpkm_scc),median(auc_rpkm_gcc),median(auc_rpkm_kcc),median(auc_rpkm_bicor),
-                       median(auc_rpkm_aa),median(auc_rpkm_ma),median(auc_rpkm_mrnet),median(auc_rpkm_clr))
+auc_cpm_all_mean <- c(mean(unlist(auc_cpm_pcc)),mean(unlist(auc_cpm_scc)),mean(unlist(auc_cpm_gcc)),mean(unlist(auc_cpm_kcc)),mean(unlist(auc_cpm_bicor)),
+                      mean(unlist(auc_cpm_aa)),mean(unlist(auc_cpm_ma)),mean(unlist(auc_cpm_mrnet)),mean(unlist(auc_cpm_clr)))
 
+
+auc_rc_all_mean <- c(mean(unlist(auc_rc_pcc)),mean(unlist(auc_rc_scc)),mean(unlist(auc_rc_gcc)),mean(unlist(auc_rc_kcc)),mean(unlist(auc_rc_bicor)),
+                      mean(unlist(auc_rc_aa)),mean(unlist(auc_rc_ma)),mean(unlist(auc_rc_mrnet)),mean(unlist(auc_rc_clr)))
+
+auc_rpkm_all_mean <- c(mean(unlist(auc_rpkm_pcc)),mean(unlist(auc_rpkm_scc)),mean(unlist(auc_rpkm_gcc)),mean(unlist(auc_rpkm_kcc)),mean(unlist(auc_rpkm_bicor)),
+                      mean(unlist(auc_rpkm_aa)),mean(unlist(auc_rpkm_ma)),mean(unlist(auc_rpkm_mrnet)),mean(unlist(auc_rpkm_clr)))
+
+save(auc_vst_all_mean,auc_cpm_all_mean,auc_rc_all_mean,auc_rpkm_all_mean,file="auc_mean_all_4077.RData")
 
 
 # sort cogene_result by length of the elements in the list. just curious, not necessary.
