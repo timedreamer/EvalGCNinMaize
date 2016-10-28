@@ -1,4 +1,5 @@
-# this file to evaluate correlation network based on pathway information from MaizeCyc
+# this file to process/convert pathway information from MaizeCyc
+# Change transcript name to Gene name.
 # Code tested.
 getwd()
 setwd("C:\\WORK\\Co-expression\\GeneOntology_pathway")
