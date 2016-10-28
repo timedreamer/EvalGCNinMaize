@@ -1,8 +1,7 @@
-
+# This script is to code different size of network and only calculate PCC, MRNET and CLR.
 library(parmigene)
 library(edgeR)
 
-setwd("C:/WORK/Co-expression/")
 setwd("D:\\Users\\jhuang\\Documents\\Co-expression")
 load("15116_geneNames.RData")
 #
@@ -26,19 +25,40 @@ aggregate_cpm <- function(x,output) {
   assign(paste0("cpm",output,"_MI"),knnmi.all(counts.p.m,k=3))
   assign(paste0("cpm",output,"_mrnet"),mrnet(eval(as.name(paste0("cpm",output,"_MI")))))
   assign(paste0("cpm",output,"_clr"),clr(eval(as.name(paste0("cpm",output,"_MI")))))
-  #cpm_pcc <- cor(t(counts.p.m),method = "pearson")
-  # cpm_MI <- knnmi.all(counts.p.m,k=3)
-  # cpm_mrnet <- mrnet(cpm_MI)
-  # cpm_clr <- clr(cpm_MI)
+
   save(list=paste0("cpm",output,"_pcc"),file=paste0(output,"_cpm_pcc.RData"))
   save(list=paste0("cpm",output,"_MI"),file=paste0(output,"_cpm_MI.RData"))
   save(list=paste0("cpm",output,"_mrnet"),file=paste0(output,"_cpm_mrnet.RData"))
   save(list=paste0("cpm",output,"_clr"),file=paste0(output,"_cpm_clr.RData"))
-  # save(cpm_MI,file=paste0(output,"_cpm_MI.RData"))
-  # save(cpm_mrnet,file=paste0(output,"_cpm_mrnet.RData"))
-  # save(cpm_clr,file=paste0(output,"_cpm_clr.RData"))
+
 }
 
 
 aggre_exp <- read.delim("12.txt",header = F)
 aggregate_cpm(aggre_exp,"12")
+
+ptm <- proc.time()
+aggre_exp <- read.delim("36.txt",header = F)
+aggregate_cpm(aggre_exp,"36")
+proc.time()  - ptm # 20012 s
+
+
+ptm <- proc.time()
+aggre_exp <- read.delim("65.txt",header = F)
+aggregate_cpm(aggre_exp,"65")
+proc.time()  - ptm # 22060 s
+
+ptm <- proc.time()
+aggre_exp <- read.delim("108.txt",header = F)
+aggregate_cpm(aggre_exp,"108")
+proc.time()  - ptm # 25620 s
+
+ptm <- proc.time()
+aggre_exp <- read.delim("270.txt",header = F)
+aggregate_cpm(aggre_exp,"270")
+proc.time()  - ptm # 37187 s
+
+ptm <- proc.time()
+aggre_exp <- read.delim("404.txt",header = F)
+aggregate_cpm(aggre_exp,"404")
+proc.time()  - ptm # 52316 s
