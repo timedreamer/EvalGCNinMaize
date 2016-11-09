@@ -35,5 +35,7 @@ vignettes/*.pdf
 # Excel,csv and tab-delimited txt files
 *.xlsx
 *.xls
+*.docx
 *.csv
 *.txt
+*.pdf
