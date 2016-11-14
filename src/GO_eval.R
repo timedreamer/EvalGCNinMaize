@@ -1,4 +1,4 @@
-# this script is to
+# this script is to calculate AUROC for differnt total networks using GeneOntology.
 
 library (EGAD)
 
