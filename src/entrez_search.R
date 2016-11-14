@@ -46,7 +46,7 @@ sra_maize <- c(0,6,9,31,460,524,811,2389)
 
 png("seq_array_1.png", units = "px", width=3000, height=3000, res=300)
 par(mar=c(6,6,3,1))
-plot(sra_maize,type="b",col="black",xaxt="n", main="Maize RNA-Seq vs Microarray Samples",
+plot(sra_maize,type="b",col="black",xaxt="n",ylim=c(0,2500), main="Maize RNA-Seq vs Microarray Samples",
      ylab="number of samples",xlab="year",lwd=2.5,cex.axis =1.5,cex.lab=1.5,cex.main=2)
 lines(geo_maize,type="b",col="black",lty=2,lwd=2.5)
 axis(1, at=1:8, labels=c(2008:2015),cex.axis=1.5,cex.lab=2)
@@ -67,5 +67,5 @@ names(c_total) <- c("Microarray","RNA-Seq")
 png("seq_array_2.png", units = "px", width=3000, height=3000, res=300)
 par(mar=c(6,10,10,6))
 barplot(c_total,col="black",main="Total maize RNA-Seq vs Microarray",
-        ylab="number of samples",cex.main=2.5,cex.lab=1.5,cex.axis=1.5,cex.names = 2)
+        ylab="number of samples",cex.main=2.5,cex.lab=1.5,cex.axis=2,cex.names = 2)
 dev.off()
