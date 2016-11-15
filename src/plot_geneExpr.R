@@ -3,6 +3,9 @@ setwd("D:\\Users\\jhuang\\Documents\\Co-expression\\Normalization result")
 setwd("C:\\WORK\\EvalGCNinMaize\\data")
 
 # plot all gene expression into density plot
+raw_data  <- read.delim("ALL_FC_noDuplicateLib_biggerThan5Million_70allignmentRate_1266.txt",
+                        stringsAsFactors = FALSE,check.names = FALSE)
+
 vst <- read.delim("VST_result.txt",sep="\t",header=T)
 cpm <- read.delim("CPM_log2.txt",sep="\t",header=T)
 rc <- read.delim("rawCount_log2_result.txt",sep="\t",header=T)
@@ -32,6 +35,10 @@ text(18,0.18,"RC",cex=2)
 par(mar=c(6,6,3,1))
 plot(density(as.numeric(cpm[,1267])),main="geneLength",lwd=2.5,
      cex.axis=1.2,cex.lab=1.5,cex.main=1,ylab="Density",xlab="geneLength")
+
+plot(density(as.numeric(raw_data[,6])),main="geneLength",lwd=2.5,
+     cex.axis=1.2,cex.lab=1.5,cex.main=1,ylab="Density",xlab="geneLength")
+#export as 9*9 pdf
 
 # gene average expresion
 par(mfrow=c(2,2),mar=c(6,6,3,1))
