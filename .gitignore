@@ -41,3 +41,4 @@ vignettes/*.pdf
 *.pdf
 *.RData
 *.SIF
+.Rproj.user
