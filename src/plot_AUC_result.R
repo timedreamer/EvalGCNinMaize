@@ -72,14 +72,14 @@ mrnet <- result_go$mrnet
 clr <- result_go$clr
 
 par(mar=c(6,6,3,1))
-plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.75), main="",
+plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.76), main="",
      ylab="mean AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
 lines(mrnet,type="b",col="red",lwd=2.5)
 lines(clr,type="b",col="blue",lwd=2.5)
-axis(1, at=1:9, labels=c(12,36,65,108,270,404,1266,"agg","protein"),
+axis(1, at=1:10, labels=c(12,36,65,108,270,404,1266,"six","all","protein"),
      cex.axis=1.5,cex.lab=2)
 legend("topleft",c("pcc","mrnet","clr"),lty=c(1,1,1),
-       col=c("black","red","blue"),lwd=2,cex=1.2) 
+       col=c("black","red","blue"),lwd=2,cex=1.5) 
 # export pdf as 10*9
 
 # PP_PTY
@@ -89,12 +89,12 @@ mrnet <- result_pp$mrnet
 clr <- result_pp$clr
 
 par(mar=c(6,6,3,1))
-plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.6), main="",
+plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.62), main="",
      ylab="mean AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
 lines(mrnet,type="b",col="red",lwd=2.5)
 lines(clr,type="b",col="blue",lwd=2.5)
-axis(1, at=1:9, labels=c(12,36,65,108,270,404,1266,"agg","protein"),
+axis(1, at=1:10, labels=c(12,36,65,108,270,404,1266,"six","all","protein"),
      cex.axis=1.5,cex.lab=2)
 legend("topleft",c("pcc","mrnet","clr"),lty=c(1,1,1),
-       col=c("black","red","blue"),lwd=2,cex=1.2)
+       col=c("black","red","blue"),lwd=2,cex=1.5)
 # export pdf as 10*9
