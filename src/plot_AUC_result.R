@@ -89,7 +89,7 @@ mrnet <- result_pp$mrnet
 clr <- result_pp$clr
 
 par(mar=c(6,6,3,1))
-plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.62), main="",
+plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.63), main="",
      ylab="mean AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
 lines(mrnet,type="b",col="red",lwd=2.5)
 lines(clr,type="b",col="blue",lwd=2.5)
