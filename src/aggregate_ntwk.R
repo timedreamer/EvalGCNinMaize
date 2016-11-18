@@ -1,119 +1,106 @@
-# This script is to code different size of network and only calculate PCC, MRNET and CLR.
-library(parmigene)
-library(edgeR)
-
-setwd("D:\\Users\\jhuang\\Documents\\Co-expression")
-setwd("/home/bio.local/jhuang/data/aggregate_ntwk")
-load("15116_geneNames.RData")
-#
-raw_data  <- read.delim("ALL_FC_noDuplicateLib_biggerThan5Million_70allignmentRate_1266.txt",
-                        stringsAsFactors = FALSE,check.names = FALSE)
+# This script is to calculate the AUC, both PPPTY and GO for the aggregation of all 15 experiments
+# within the 1266 libs. Testeds.
 
 
+######################################################################################################
+#### WITHOUT RANKING STEP
+#####################################################################################################
 
-aggregate_cpm <- function(x,output) {
-  
-  x <- t(x)
-  raw_data_agg <- raw_data[,which(colnames(raw_data) %in% x)]
-  raw_data_agg <- cbind(raw_data[,c(1,2)],raw_data_agg)
-  raw_data_agg <- raw_data_agg[which(raw_data_agg[,1] %in% ntwk_geneName),]
-  gene_name <- unname(raw_data_agg$Geneid)
-  y <- DGEList(counts = raw_data_agg[3:ncol(raw_data_agg)],genes = gene_name)
-  y <- calcNormFactors(y)
-  counts.p.m <- cpm(y,normalized.lib.sizes = TRUE,log = TRUE,prior.count = 1)
-  rownames(counts.p.m) <- gene_name
-  assign(paste0("cpm",output,"_pcc"),cor(t(counts.p.m),method = "pearson"))
-  assign(paste0("cpm",output,"_MI"),knnmi.all(counts.p.m,k=3))
-  assign(paste0("cpm",output,"_mrnet"),mrnet(eval(as.name(paste0("cpm",output,"_MI")))))
-  assign(paste0("cpm",output,"_clr"),clr(eval(as.name(paste0("cpm",output,"_MI")))))
-  
-  save(list=paste0("cpm",output,"_pcc"),file=paste0(output,"_cpm_pcc.RData"))
-  save(list=paste0("cpm",output,"_MI"),file=paste0(output,"_cpm_MI.RData"))
-  save(list=paste0("cpm",output,"_mrnet"),file=paste0(output,"_cpm_mrnet.RData"))
-  save(list=paste0("cpm",output,"_clr"),file=paste0(output,"_cpm_clr.RData"))
-}
+setwd("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk")
 
+###PCC
 
-aggre_exp <- read.delim("12.txt",header = F)
-aggregate_cpm(aggre_exp,"12")
+# load data
+load("./12/12_cpm_pcc.RData");load("./36/36_cpm_pcc.RData");load("./65/65_cpm_pcc.RData")
+load("./108/108_cpm_pcc.RData");load("270/270_cpm_pcc.RData");load("404/404_cpm_pcc.RData")
+load("Exp7/exp7_cpm_pcc.RData");load("Exp8/exp8_cpm_pcc.RData");load("Exp8/exp8_cpm_pcc.RData")
+load("Exp9/exp9_cpm_pcc.RData");load("Exp10/exp10_cpm_pcc.RData");load("Exp11/exp11_cpm_pcc.RData")
+load("Exp12/exp12_cpm_pcc.RData");load("Exp13/exp13_cpm_pcc.RData");load("Exp13/exp13_cpm_pcc.RData")
+load("Exp15/exp15_cpm_pcc.RData");
+load("Exp14/exp14_cpm_pcc.RData"); # somehow the exp14_pcc has NA in the matrix.
 
-ptm <- proc.time()
-aggre_exp <- read.delim("36.txt",header = F)
-aggregate_cpm(aggre_exp,"36")
-proc.time()  - ptm # 20012 s
+cpmexp14_pcc[is.na(cpmexp14_pcc)] <- 0 # need to change NA to 0. 
 
+agg_ntwk <- abs(cpm12_pcc) + abs(cpm36_pcc) + abs(cpm65_pcc) + abs(cpm108_pcc) + 
+  abs(cpm270_pcc) + abs(cpm404_pcc) + abs(cpmexp7_pcc) +abs(cpmexp8_pcc) +
+  abs(cpmexp9_pcc) +abs(cpmexp10_pcc) +abs(cpmexp11_pcc) +abs(cpmexp12_pcc) +
+  abs(cpmexp13_pcc) +abs(cpmexp15_pcc) + abs(cpmexp14_pcc)
 
-ptm <- proc.time()
-aggre_exp <- read.delim("65.txt",header = F)
-aggregate_cpm(aggre_exp,"65")
-proc.time()  - ptm # 22060 s
+rm(cpm12_pcc,cpm36_pcc,cpm65_pcc,cpm108_pcc,cpm270_pcc,cpm404_pcc,cpmexp7_pcc,cpmexp8_pcc,
+   cpmexp9_pcc,cpmexp10_pcc,cpmexp11_pcc,cpmexp12_pcc,cpmexp13_pcc,cpmexp14_pcc,cpmexp15_pcc)
 
-ptm <- proc.time()
-aggre_exp <- read.delim("108.txt",header = F)
-aggregate_cpm(aggre_exp,"108")
-proc.time()  - ptm # 25620 s
-
-ptm <- proc.time()
-aggre_exp <- read.delim("270.txt",header = F)
-aggregate_cpm(aggre_exp,"270")
-proc.time()  - ptm # 37187 s
-
-ptm <- proc.time()
-aggre_exp <- read.delim("404.txt",header = F)
-aggregate_cpm(aggre_exp,"404")
-proc.time() - ptm # 52316 s
-
-ptm <- proc.time()
-aggre_exp <- read.delim("exp7.txt",header = F)
-aggregate_cpm(aggre_exp,"exp7")
-proc.time()  - ptm #4038s
-rm(cpmexp7_pcc,cpmexp7_clr,cpmexp7_mrnet)
-
-ptm <- proc.time()
-aggre_exp <- read.delim("exp8.txt",header = F)
-aggregate_cpm(aggre_exp,"exp8")
-proc.time()  - ptm #3963s
-rm(cpmexp8_pcc,cpmexp8_clr,cpmexp8_mrnet)
-
-ptm <- proc.time()
-aggre_exp <- read.delim("exp9.txt",header = F)
-aggregate_cpm(aggre_exp,"exp9")
-proc.time()  - ptm #3184s
-rm(cpmexp9_pcc,cpmexp9_clr,cpmexp9_mrnet)
-
-ptm <- proc.time()
-aggre_exp <- read.delim("exp10.txt",header = F)
-aggregate_cpm(aggre_exp,"exp10")
-proc.time()  - ptm #3737s
-rm(cpmexp10_pcc,cpmexp10_clr,cpmexp10_mrnet)
-
-ptm <- proc.time()
-aggre_exp <- read.delim("exp11.txt",header = F)
-aggregate_cpm(aggre_exp,"exp11")
-proc.time()  - ptm #3258s
-rm(cpmexp11_pcc,cpmexp11_clr,cpmexp11_mrnet)
-
-ptm <- proc.time()
-aggre_exp <- read.delim("exp12.txt",header = F)
-aggregate_cpm(aggre_exp,"exp12")
-proc.time()  - ptm # 3061s
-rm(cpmexp11_pcc,cpmexp11_clr,cpmexp11_mrnet)
-
-ptm <- proc.time()
-aggre_exp <- read.delim("exp13.txt",header = F)
-aggregate_cpm(aggre_exp,"exp13")
-proc.time()  - ptm #3023s
-rm(cpmexp13_pcc,cpmexp13_clr,cpmexp13_mrnet)
+cpmagg_test_ft <- agg_ntwk[,which(colnames(agg_ntwk) %in% filter_node_name)]                      #
+auc_agg_test <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=cpmagg_test_ft)                   #
+mean(unlist(auc_agg_test)) #
+auc_agg_pcc_noRank <- auc_agg_test
+save(auc_agg_pcc_noRank,file="agg_cpm_pccAll_PPPTY_noRank.RData")
 
 
-ptm <- proc.time()
-aggre_exp <- read.delim("exp14.txt",header = F)
-aggregate_cpm(aggre_exp,"exp14")
-proc.time()  - ptm #3129s
-rm(cpmexp14_pcc,cpmexp14_clr,cpmexp14_mrnet)
+system.time(GO_pcc_agg_ntwk <- run_GBA(agg_ntwk,annotations_sub))
+GO_pcc_agg_ntwk[[3]]
+save(GO_pcc_agg_ntwk,file="agg_cpmPccAll_GO_noRank.RData")
 
-ptm <- proc.time()
-aggre_exp <- read.delim("exp15.txt",header = F)
-aggregate_cpm(aggre_exp,"exp15")
-proc.time()  - ptm #2890s
-rm(cpmexp15_pcc,cpmexp15_clr,cpmexp15_mrnet)
+rm(GO_pcc_agg_ntwk,agg_ntwk,agg_ntwk)
+
+
+###MRNET
+
+# load data
+load("./12/12_cpm_mrnet.RData");load("./36/36_cpm_mrnet.RData");load("./65/65_cpm_mrnet.RData")
+load("./108/108_cpm_mrnet.RData");load("270/270_cpm_mrnet.RData");load("404/404_cpm_mrnet.RData")
+load("Exp7/exp7_cpm_mrnet.RData");load("Exp8/exp8_cpm_mrnet.RData");load("Exp8/exp8_cpm_mrnet.RData")
+load("Exp9/exp9_cpm_mrnet.RData");load("Exp10/exp10_cpm_mrnet.RData");load("Exp11/exp11_cpm_mrnet.RData")
+load("Exp12/exp12_cpm_mrnet.RData");load("Exp13/exp13_cpm_mrnet.RData");load("Exp13/exp13_cpm_mrnet.RData")
+load("Exp15/exp15_cpm_mrnet.RData")
+
+agg_ntwk <- abs(cpm12_mrnet) + abs(cpm36_mrnet) + abs(cpm65_mrnet) + abs(cpm108_mrnet) + 
+  abs(cpm270_mrnet) + abs(cpm404_mrnet) + abs(cpmexp7_mrnet) +abs(cpmexp8_mrnet) +
+  abs(cpmexp9_mrnet) +abs(cpmexp10_mrnet) +abs(cpmexp11_mrnet) +abs(cpmexp12_mrnet) +
+  abs(cpmexp13_mrnet) +abs(cpmexp15_mrnet) + abs(cpmexp14_mrnet)
+
+
+rm(cpm12_mrnet,cpm36_mrnet,cpm65_mrnet,cpm108_mrnet,cpm270_mrnet,cpm404_mrnet,cpmexp7_mrnet,cpmexp8_mrnet,
+   cpmexp9_mrnet,cpmexp10_mrnet,cpmexp11_mrnet,cpmexp12_mrnet,cpmexp13_mrnet,cpmexp14_mrnet,cpmexp15_mrnet)
+
+cpmagg_test_ft <- agg_ntwk[,which(colnames(agg_ntwk) %in% filter_node_name)] # dim vst_gcc_ft 15116*753                        #
+auc_agg_test <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=cpmagg_test_ft)                   #
+mean(unlist(auc_agg_test)) #
+auc_agg_mrnet_noRank <- auc_agg_test
+save(auc_agg_mrnet_noRank,file="agg_cpm_mrnetAll_PPPTY_noRank.RData")
+
+GO_mrnet_agg_ntwk <- run_GBA(agg_ntwk,annotations_sub)
+GO_mrnet_agg_ntwk[[3]]
+GO_agg_mrnet_noRank <- GO_mrnet_agg_ntwk
+save(GO_agg_mrnet_noRank,file="agg_cpmMrnetAll_GO_noRank.RData")
+
+
+###CLR
+
+# load data
+load("./12/12_cpm_clr.RData");load("./36/36_cpm_clr.RData");load("./65/65_cpm_clr.RData")
+load("./108/108_cpm_clr.RData");load("270/270_cpm_clr.RData");load("404/404_cpm_clr.RData")
+load("Exp7/exp7_cpm_clr.RData");load("Exp8/exp8_cpm_clr.RData");load("Exp8/exp8_cpm_clr.RData")
+load("Exp9/exp9_cpm_clr.RData");load("Exp10/exp10_cpm_clr.RData");load("Exp11/exp11_cpm_clr.RData")
+load("Exp12/exp12_cpm_clr.RData");load("Exp13/exp13_cpm_clr.RData");load("Exp13/exp13_cpm_clr.RData")
+load("Exp15/exp15_cpm_clr.RData")
+
+
+agg_ntwk <- abs(cpm12_clr) + abs(cpm36_clr) + abs(cpm65_clr) + abs(cpm108_clr) + 
+  abs(cpm270_clr) + abs(cpm404_clr) + abs(cpmexp7_clr) +abs(cpmexp8_clr) +
+  abs(cpmexp9_clr) +abs(cpmexp10_clr) +abs(cpmexp11_clr) +abs(cpmexp12_clr) +
+  abs(cpmexp13_clr) +abs(cpmexp15_clr) + abs(cpmexp14_clr)
+
+
+rm(cpm12_clr,cpm36_clr,cpm65_clr,cpm108_clr,cpm270_clr,cpm404_clr,cpmexp7_clr,cpmexp8_clr,
+   cpmexp9_clr,cpmexp10_clr,cpmexp11_clr,cpmexp12_clr,cpmexp13_clr,cpmexp15_clr,cpmexp14_clr)
+
+cpmagg_test_ft <- agg_ntwk[,which(colnames(agg_ntwk) %in% filter_node_name)] # dim vst_gcc_ft 15116*753                        #
+auc_agg_test <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=cpmagg_test_ft)                   #
+mean(unlist(auc_agg_test)) #
+auc_agg_clr_noRank <- auc_agg_test
+save(auc_agg_clr_noRank,file="agg_cpm_clrAll_PPPTY_noRank.RData")
+
+GO_clr_agg_ntwk <- run_GBA(agg_ntwk,annotations_sub)
+GO_clr_agg_ntwk[[3]]
+GO_agg_clr_noRank <- GO_clr_agg_ntwk
+save(GO_agg_clr_noRank,file="agg_cpmClrAll_GO_noRank.RData")
