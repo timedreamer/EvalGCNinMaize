@@ -1,5 +1,6 @@
 # This script is to calculate the AUC, both PPPTY and GO for the aggregation of all 15 experiments
 # within the 1266 libs. Testeds.
+# PS: exp14_cpm_pcc need to change NA to 0 before aggregation.
 
 
 ######################################################################################################
@@ -19,9 +20,9 @@ load("Exp12/exp12_cpm_pcc.RData");load("Exp13/exp13_cpm_pcc.RData");load("Exp13/
 load("Exp15/exp15_cpm_pcc.RData");
 load("Exp14/exp14_cpm_pcc.RData"); # somehow the exp14_pcc has NA in the matrix.
 
-cpmexp14_pcc[is.na(cpmexp14_pcc)] <- 0 # need to change NA to 0. 
+cpmexp14_pcc[is.na(cpmexp14_pcc)] <- 0 # need to change NA to 0.
 
-agg_ntwk <- abs(cpm12_pcc) + abs(cpm36_pcc) + abs(cpm65_pcc) + abs(cpm108_pcc) + 
+agg_ntwk <- abs(cpm12_pcc) + abs(cpm36_pcc) + abs(cpm65_pcc) + abs(cpm108_pcc) +
   abs(cpm270_pcc) + abs(cpm404_pcc) + abs(cpmexp7_pcc) +abs(cpmexp8_pcc) +
   abs(cpmexp9_pcc) +abs(cpmexp10_pcc) +abs(cpmexp11_pcc) +abs(cpmexp12_pcc) +
   abs(cpmexp13_pcc) +abs(cpmexp15_pcc) + abs(cpmexp14_pcc)
@@ -53,7 +54,7 @@ load("Exp9/exp9_cpm_mrnet.RData");load("Exp10/exp10_cpm_mrnet.RData");load("Exp1
 load("Exp12/exp12_cpm_mrnet.RData");load("Exp13/exp13_cpm_mrnet.RData");load("Exp13/exp13_cpm_mrnet.RData")
 load("Exp15/exp15_cpm_mrnet.RData")
 
-agg_ntwk <- abs(cpm12_mrnet) + abs(cpm36_mrnet) + abs(cpm65_mrnet) + abs(cpm108_mrnet) + 
+agg_ntwk <- abs(cpm12_mrnet) + abs(cpm36_mrnet) + abs(cpm65_mrnet) + abs(cpm108_mrnet) +
   abs(cpm270_mrnet) + abs(cpm404_mrnet) + abs(cpmexp7_mrnet) +abs(cpmexp8_mrnet) +
   abs(cpmexp9_mrnet) +abs(cpmexp10_mrnet) +abs(cpmexp11_mrnet) +abs(cpmexp12_mrnet) +
   abs(cpmexp13_mrnet) +abs(cpmexp15_mrnet) + abs(cpmexp14_mrnet)
@@ -85,7 +86,7 @@ load("Exp12/exp12_cpm_clr.RData");load("Exp13/exp13_cpm_clr.RData");load("Exp13/
 load("Exp15/exp15_cpm_clr.RData")
 
 
-agg_ntwk <- abs(cpm12_clr) + abs(cpm36_clr) + abs(cpm65_clr) + abs(cpm108_clr) + 
+agg_ntwk <- abs(cpm12_clr) + abs(cpm36_clr) + abs(cpm65_clr) + abs(cpm108_clr) +
   abs(cpm270_clr) + abs(cpm404_clr) + abs(cpmexp7_clr) +abs(cpmexp8_clr) +
   abs(cpmexp9_clr) +abs(cpmexp10_clr) +abs(cpmexp11_clr) +abs(cpmexp12_clr) +
   abs(cpmexp13_clr) +abs(cpmexp15_clr) + abs(cpmexp14_clr)
