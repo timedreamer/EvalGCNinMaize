@@ -9,8 +9,20 @@ As a result, 26 libraries with less than 5 milliion reads were excluded as well 
 
 **Gene count normalization**
 
-The obtain gene count expression data was normalization using four different methods before constructing GCN. Counts Per Milliion(CPM) and Reads Per Killobase Per Million(RPKM) were calcualted by edgeR package in R environment and then log2 normalized; Variance Stabilizating Transformation(VST) was calcualted by DESeq2 package. Raw count(RC) for gene expressions were normalized by log2.
+The obtain gene count expression data was normalization using four different methods before constructing GCN. Counts Per Milliion(CPM) and Reads Per Killobase Per Million(RPKM) were calcualted by edgeR package in R environment and then log2 normalized; Variance Stabilizating Transformation(VST) was calcualted by DESeq2 package. Raw count(RC) for gene expressions were normalized by log2. Low expressed genes which defined as CPM less than 2 in more than 1000 samples were exlcuded from the following analysis.
 
 **Network construction**
 
-Five correlation coefficient methods and four Mutual Information methods were applied to normalized gene expression data to construct GCN. Pearson Correlation Coefficient(PCC) and Spearman Correlation Coefficient(SCC) was   
+Five correlation coefficient methods and four Mutual Information methods were applied to normalized gene expression data to construct GCN. All computing steps were done in R 3.3.1 environment. Pearson Correlation Coefficient(PCC) and Spearman Correlation Coefficient(SCC) was calculated by cor() function. Kendall rank Correlation Coefficient was calculated using cor.fk() function in pcaPP library. Gini Correlation Coefficient was calculated by adjacencymatrix() function in rsgcc library. Biweight midcorrelation was computed by bicor() function in WGCNA pacakge. Mutual information results were all computed by parmigene package.
+
+**Network Performance Evaluation**
+
+We used three four datasets to evaluate different networks' performance. First, maize protein-protein interactons were downloaded from PPIM(version 1.1). Only high-confidence interactions were left for evaluation. Second, maize pathway information was downloaded from MaizeCyc(version 2.2) and same pathway genes were considered as co-expressed together. Third, maize gene ontology data for AGPv3.30 was downloaded from AgriGO. Fourth, ChIP-Seq confirmed targets for HDA101(GRMZM2G172883) was used as poitive co-exressed examples for evaluation.
+
+In terms of evaluation method, we adopted the widely used Receiver operating characteristic (ROC) Curve and Area Under Curve(AUC) for binary classfier problems. R pacakge ROCR and EGAD were used for this purpose.
+
+**Network Clustering**
+
+For each network, top 1 million edges were selected as stringent co-expression networks. The topology of networks were calcaulted using powerRlaw package in R and Cy. To test whether the distribution of nodes were following power-law distribution, the Kolomogorov Smirnoff statistic (KS) was applied with 1000 bootstrap simulations.
+
+Graph clustering was performed using Markov Cluster Algorithm (MCL) in Cytoscape clusterMake with inflatino value set to 1.8. Networks were also visualized in Cytoscape.
