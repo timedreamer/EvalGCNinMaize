@@ -141,8 +141,10 @@ write.table(x = raw_log,file = "rawCount_log2_result.txt",sep = "\t",quote = FAL
 
 #save colnames which are file names into seperate files named "colData".
 #Use colData as input for colData paramenter of DESeq
+write.table(colnames(filter_data),file="colData.txt",sep="\t",quote = F,header=F)
 cdInput <- read.delim("colData.txt",stringsAsFactors = FALSE,check.names = FALSE,header=FALSE)
-rownames(cdInput) <- cdInput$V1
+cdInput <- cdInput[-1,]
+rownames(cdInput) <- cdInput$V2
 dds <- DESeqDataSetFromMatrix(countData = filter_data ,colData = cdInput,design= ~1)
 str(dds)
 
