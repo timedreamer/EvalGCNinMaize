@@ -23,6 +23,8 @@ legend("center",c("vst","cpm","rc","rpkm"),bty="o",ncol=4,
        fill=c("darkred", "orange1", "yellow1","green2"),cex=1.2) # export as pdf 10*9
 
 
+
+
 # Gene Ontology
 result_go <- read.delim("fouMethod_GO_AUC.txt",sep="\t",header=T)
 rownames(result_go) <- result_go[,1]
@@ -38,6 +40,8 @@ par(mar=c(0, 0, 0, 0))
 plot.new()
 legend("center",c("vst","cpm","rc","rpkm"),bty="o",ncol=4,
        fill=c("darkred", "orange1", "yellow1","green2"),cex=1.2) # export as pdf 10*9
+
+
 
 
 
@@ -98,3 +102,6 @@ axis(1, at=1:10, labels=c(12,36,65,108,270,404,1266,"six","all","protein"),
 legend("topleft",c("pcc","mrnet","clr"),lty=c(1,1,1),
        col=c("black","red","blue"),lwd=2,cex=1.5)
 # export pdf as 10*9
+
+
+
