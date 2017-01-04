@@ -5,6 +5,7 @@
 # extract all co-expressed genes in list.
 getwd()
 setwd("D:/Users/jhuang/Documents/Co-expression")
+setwd("C:\\WORK\\EvalGCNinMaize\\data")
 
 convert_list <- function(x){
   return(P_new_combine[grep(x,P_new_combine$V1),2])
