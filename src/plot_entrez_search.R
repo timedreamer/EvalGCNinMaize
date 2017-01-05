@@ -69,3 +69,29 @@ par(mar=c(6,10,10,6))
 barplot(c_total,col="black",main="Total maize RNA-Seq vs Microarray",
         ylab="number of samples",cex.main=2.5,cex.lab=1.5,cex.axis=2,cex.names = 2)
 dev.off()
+
+
+
+############################################################################
+## Arabidopsis with ATH1 microarray.
+
+# Just search one year of SRA samples.
+entrez_search(db="sra",
+              term="(Arabidopsis[ORGN] OR Arabidopsis thaliana[ORGN]) AND 2015[PDAT] AND RNA-Seq[STRA]",
+              retmax=0)
+
+search_year_sra <- function(year, term){
+  query <- paste(term, "AND (", year, "[PDAT])")
+  entrez_search(db="sra", term=query, retmax=0)$count
+}
+
+year <- 2008:2016
+sra_arabidopsis <- sapply(year, search_year_sra, term="(Arabidopsis[ORGN] OR Arabidopsis thaliana[ORGN]) AND RNA-Seq[STRA] AND illumina[PLAT]",
+                    USE.NAMES=FALSE)
+
+entrez_search(db="gds",
+              term="GPL198[ACCN] AND 2016[PDAT]",
+              retmax=0)
+
+# 1022, 1655, 1283, 1241, 1100, 1273,1216, 1015, 802
+# from 2008 to 2016
