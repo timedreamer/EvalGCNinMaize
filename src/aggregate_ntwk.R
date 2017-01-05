@@ -30,6 +30,9 @@ agg_ntwk <- abs(cpm12_pcc) + abs(cpm36_pcc) + abs(cpm65_pcc) + abs(cpm108_pcc) +
 rm(cpm12_pcc,cpm36_pcc,cpm65_pcc,cpm108_pcc,cpm270_pcc,cpm404_pcc,cpmexp7_pcc,cpmexp8_pcc,
    cpmexp9_pcc,cpmexp10_pcc,cpmexp11_pcc,cpmexp12_pcc,cpmexp13_pcc,cpmexp14_pcc,cpmexp15_pcc)
 
+agg15_ntwkPcc <- agg_ntwk
+save(agg15_ntwkPcc,file="agg15_ntwkPCC.Rdata") # save the aggregated network PCC
+
 cpmagg_test_ft <- agg_ntwk[,which(colnames(agg_ntwk) %in% filter_node_name)]                      #
 auc_agg_test <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=cpmagg_test_ft)                   #
 mean(unlist(auc_agg_test)) #
@@ -63,6 +66,9 @@ agg_ntwk <- abs(cpm12_mrnet) + abs(cpm36_mrnet) + abs(cpm65_mrnet) + abs(cpm108_
 rm(cpm12_mrnet,cpm36_mrnet,cpm65_mrnet,cpm108_mrnet,cpm270_mrnet,cpm404_mrnet,cpmexp7_mrnet,cpmexp8_mrnet,
    cpmexp9_mrnet,cpmexp10_mrnet,cpmexp11_mrnet,cpmexp12_mrnet,cpmexp13_mrnet,cpmexp14_mrnet,cpmexp15_mrnet)
 
+agg15_ntwkMrnet <- agg_ntwk
+save(agg15_ntwkMrnet,file="agg15_ntwkMrnet.Rdata") # save the aggregated network Mrnet
+
 cpmagg_test_ft <- agg_ntwk[,which(colnames(agg_ntwk) %in% filter_node_name)] # dim vst_gcc_ft 15116*753                        #
 auc_agg_test <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=cpmagg_test_ft)                   #
 mean(unlist(auc_agg_test)) #
@@ -94,6 +100,9 @@ agg_ntwk <- abs(cpm12_clr) + abs(cpm36_clr) + abs(cpm65_clr) + abs(cpm108_clr) +
 
 rm(cpm12_clr,cpm36_clr,cpm65_clr,cpm108_clr,cpm270_clr,cpm404_clr,cpmexp7_clr,cpmexp8_clr,
    cpmexp9_clr,cpmexp10_clr,cpmexp11_clr,cpmexp12_clr,cpmexp13_clr,cpmexp15_clr,cpmexp14_clr)
+
+agg15_ntwkClr <- agg_ntwk
+save(agg15_ntwkClr,file="agg15_ntwkClr.Rdata") # save the aggregated network Clr
 
 cpmagg_test_ft <- agg_ntwk[,which(colnames(agg_ntwk) %in% filter_node_name)] # dim vst_gcc_ft 15116*753                        #
 auc_agg_test <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=cpmagg_test_ft)                   #
