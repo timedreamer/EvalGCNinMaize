@@ -97,7 +97,7 @@ barplot(as.matrix(t(result_pp[,8])),main="MRNET",names.arg = c("VST","CPM","RPKM
 barplot(as.matrix(t(result_pp[,9])),main="CLR",names.arg = c("VST","CPM","RPKM"),
         xpd=F,ylim=c(0.4,0.6),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
-###GO
+###GO  
 
 # Plot individual AUC result by Correlation and MI
 # show similar between normalization method
