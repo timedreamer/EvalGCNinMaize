@@ -26,9 +26,9 @@ auc_aggSixAgg_mrnet <- auc_agg_test
 load("~/Co-expression/Normalization result/FromNewScript_Oct2016/AUC_PTY_PP/aggregate_ntwk/agg_cpm_clr_PPPTY.RData")
 auc_aggSixAgg_clr <- auc_agg_test;rm(auc_agg_test)
 #GO_sixAggregate
-load("~/Co-expression/Normalization result/FromNewScript_Oct2016/GO_AUROC/aggregate_ntwk/agg_cpm_pcc_GO.RData")
-load("~/Co-expression/Normalization result/FromNewScript_Oct2016/GO_AUROC/aggregate_ntwk/agg_cpm_clr_GO.RData")
-load("~/Co-expression/Normalization result/FromNewScript_Oct2016/GO_AUROC/aggregate_ntwk/agg_cpm_mrnet_GO.RData")
+load("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk\\six\\agg_cpm_pcc_GO_noRank.RData")
+load("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk\\six\\agg_cpm_mrnet_GO_noRank.RData")
+load("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk\\six\\agg_cpm_clr_GO_noRank.RData")
 
 #PPPTY_15Aggregate
 load("~/Co-expression/aggregate_ntwk/withExp14_total15Exps/agg_cpm_pccAll_PPPTY_noRank.RData")
@@ -109,6 +109,22 @@ total_constructMethod <- c(method_pcc,method_mrnet,method_clr)
 
 v2 <- data.frame(total_value,total_netname,total_constructMethod)
 
+
+######
+# since the inteaction is significant, should be this one instead.
+a2 <- aov(total_value ~ total_netname*total_constructMethod,data=v2)
+res<-a2$residuals
+hist(res,main="Histogram of residuals",xlab="Residuals")
+summary(a2)
+par(mar=c(5,5,4,2))
+interaction.plot(total_netname,total_constructMethod,total_value,type="b",
+                 col=c("red","green","blue"),lwd=2,bty="n",cex.axis=1.2,
+                 cex.lab=1.2)
+box(lwd=2)
+tky2 <- TukeyHSD(a2)
+tky2
+
+# wrong interpretation
 # Two-way anova and pairwise comparison
 v2$total_constructMethod <- factor(v2$total_constructMethod,levels = c("pcc","mrnet","clr"))
 v2$total_netname <- factor(v2$total_netname,
@@ -142,7 +158,7 @@ p_fif <- GO_agg_pcc_noRank[[1]][,1];p_pr <- GO_pr_pcc[[1]][,1]
 total_pcc <- c(p_12,p_36,p_65,p_108,p_270,p_404,p_1266,p_six,p_fif,p_pr)
 total_name_pcc <- c(rep("12",277),rep("36",277),rep("65",277),rep("108",277),rep("270",277),
                    rep("404",277),rep("1266",277),
-                   rep("six",277),rep("all_15",277),rep("protein",307))
+                   rep("six",277),rep("fifteen",277),rep("protein",307))
 method_pcc <- rep("pcc",2800) #277*9+307
 
 #MRNET
@@ -154,7 +170,7 @@ p_fif <- GO_agg_mrnet_noRank[[1]][,1];p_pr <- GO_pr_mrnet[[1]][,1]
 total_mrnet <- c(p_12,p_36,p_65,p_108,p_270,p_404,p_1266,p_six,p_fif,p_pr)
 total_name_mrnet <- c(rep("12",277),rep("36",277),rep("65",277),rep("108",277),rep("270",277),
                     rep("404",277),rep("1266",277),
-                    rep("six",277),rep("all_15",277),rep("protein",307))
+                    rep("six",277),rep("fifteen",277),rep("protein",307))
 method_mrnet <- rep("mrnet",2800) #277*9+307
 
 #CLR
@@ -166,15 +182,95 @@ p_fif <- GO_agg_clr_noRank[[1]][,1];p_pr <- GO_pr_clr[[1]][,1]
 total_clr <- c(p_12,p_36,p_65,p_108,p_270,p_404,p_1266,p_six,p_fif,p_pr)
 total_name_clr <- c(rep("12",277),rep("36",277),rep("65",277),rep("108",277),rep("270",277),
                     rep("404",277),rep("1266",277),rep("six",277),
-                    rep("all_15",277),rep("protein",307))
+                    rep("fifteen",277),rep("protein",307))
 method_clr <- rep("clr",2800) #277*9+307
 
+# one-factor boxplot
+par(mfrow=c(2,2))
+boxplot(total_pcc~total_name_pcc,data=v_one_p,main="GO_PCC",las=2,
+        outcol="grey",whiskcol="grey",staplecol="grey",
+        names=c("12","36","65","108","270","404","1266","six","fifteen","protein"));box(lwd=2)
+
+boxplot(total_mrnet~total_name_mrnet,data=v_one_m,main="GO_MRNET",las=2,
+        outcol="grey",whiskcol="grey",staplecol="grey",
+        names=c("12","36","65","108","270","404","1266","six","fifteen","protein"));box(lwd=2)
+
+boxplot(total_clr~total_name_clr,data=v_one_c,main="GO_CLR",las=2,
+        outcol="grey",whiskcol="grey",staplecol="grey",
+        names=c("12","36","65","108","270","404","1266","six","fifteen","protein"));box(lwd=2)
+
 # Add together
+# one-way anova PCC
+v_one_p <- data.frame(total_pcc,total_name_pcc) 
+aov_one_p <- aov(total_pcc~total_name_pcc,data=v_one_p) 
+summary(aov_one_p)
+TukeyHSD(aov_one_p)
+pairwise.wilcox.test(total_pcc,total_name_pcc,p.adjust.method = "b")
+
+# one-way anova MRNET
+v_one_m <- data.frame(total_mrnet,total_name_mrnet) 
+aov_one_m <- aov(total_mrnet~total_name_mrnet,data=v_one_m) 
+summary(aov_one_m)
+TukeyHSD(aov_one_m)
+pairwise.wilcox.test(total_mrnet,total_name_mrnet,p.adjust.method = "b")
+
+# one-way anova CLR
+v_one_c <- data.frame(total_clr,total_name_clr) 
+aov_one_c <- aov(total_clr~total_name_clr,data=v_one_c) 
+summary(aov_one_c)
+TukeyHSD(aov_one_c)
+pairwise.wilcox.test(total_clr,total_name_clr,p.adjust.method = "b")
+
+v_one_p$total_name_pcc <- factor(v_one_p$total_name_pcc,
+                                 level = c("12","36","65","108","270","404","1266",
+                                           "six","all_15","protein"))
+
+
+v_one_m$total_name_mrnet <- factor(v_one_m$total_name_mrnet,
+                                 level = c("12","36","65","108","270","404","1266",
+                                           "six","all_15","protein"))
+
+v_one_c$total_name_clr <- factor(v_one_c$total_name_clr,
+                    level = c("12","36","65","108","270","404","1266",
+                              "six","all_15","protein"))
+
+#total 
 total_value <- c(total_pcc,total_mrnet,total_clr)
 total_netname <- c(total_name_pcc,total_name_mrnet,total_name_clr)
 total_constructMethod <- c(method_pcc,method_mrnet,method_clr)
 
 v2 <- data.frame(total_value,total_netname,total_constructMethod)
+
+######
+# since the inteaction is significant, should be this one instead.
+a2 <- aov(total_value ~ total_netname*total_constructMethod,data=v2)
+res<-a2$residuals
+hist(res,main="Histogram of residuals",xlab="Residuals")
+summary(a2)
+par(mar=c(5,5,4,2))
+# this plot is the same as what I drew for the mean. redundent.
+interaction.plot(total_netname,total_constructMethod,total_value,type="b",
+                 col=c("red","green","blue"),lwd=2,bty="n",cex.axis=1.2,
+                 cex.lab=1.2) 
+box(lwd=2)
+tky2 <- TukeyHSD(a2)
+tky2
+
+
+v2$total_netname <- factor(v2$total_netname,
+                           c("12","36","65","108","270","404","1266","six","fifteen","protein"))
+v2$total_constructMethod <- factor(v2$total_constructMethod,c("pcc","mrnet","clr"))
+
+str(v2$total_netname)
+par(mfrow=c(1,1),mar=c(7,4,4,2))
+boxplot(total_value~total_constructMethod*total_netname,data = v2,las=2,yaxt="n",
+        col=rep(c(rep("white",3),rep("grey",3)),5),
+        outcol="grey",whiskcol="grey",staplecol="grey",main="allNtwk")
+box(lwd=2);axis(2,cex.axis=1.5,las=1)
+
+
+
+
 
 # Two-way anova and pairwise comparison
 v2$total_constructMethod <- factor(v2$total_constructMethod,levels = c("pcc","mrnet","clr"))

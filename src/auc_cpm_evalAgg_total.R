@@ -1,6 +1,7 @@
 # This scipt is to combine all six individual network together
 # then calculate AUC for the "aggregated network" from Protein-protein
 # interaction dataset as well as Gene Ontology.
+# run GO_eval.R first
 
 ############################################################################################################
 ####PART I NORMALIZED BY RANKING
