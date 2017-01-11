@@ -160,6 +160,8 @@ total_name_pcc <- c(rep("12",277),rep("36",277),rep("65",277),rep("108",277),rep
                    rep("404",277),rep("1266",277),
                    rep("six",277),rep("fifteen",277),rep("protein",307))
 method_pcc <- rep("pcc",2800) #277*9+307
+mean_pcc <- c(mean(p_12),mean(p_36),mean(p_65),mean(p_108),mean(p_270),mean(p_404),
+            mean(p_1266),mean(p_six),mean(p_fif),mean(p_pr))
 
 #MRNET
 p_12 <- GO_12_mrnet[[1]][,1];p_36 <- GO_36_mrnet[[1]][,1];p_65 <- GO_65_mrnet[[1]][,1]
@@ -172,6 +174,8 @@ total_name_mrnet <- c(rep("12",277),rep("36",277),rep("65",277),rep("108",277),r
                     rep("404",277),rep("1266",277),
                     rep("six",277),rep("fifteen",277),rep("protein",307))
 method_mrnet <- rep("mrnet",2800) #277*9+307
+mean_mrnet <- c(mean(p_12),mean(p_36),mean(p_65),mean(p_108),mean(p_270),mean(p_404),
+            mean(p_1266),mean(p_six),mean(p_fif),mean(p_pr))
 
 #CLR
 p_12 <- GO_12_clr[[1]][,1];p_36 <- GO_36_clr[[1]][,1];p_65 <- GO_65_clr[[1]][,1]
@@ -184,20 +188,27 @@ total_name_clr <- c(rep("12",277),rep("36",277),rep("65",277),rep("108",277),rep
                     rep("404",277),rep("1266",277),rep("six",277),
                     rep("fifteen",277),rep("protein",307))
 method_clr <- rep("clr",2800) #277*9+307
+mean_clr <- c(mean(p_12),mean(p_36),mean(p_65),mean(p_108),mean(p_270),mean(p_404),
+            mean(p_1266),mean(p_six),mean(p_fif),mean(p_pr))
 
-# one-factor boxplot
-par(mfrow=c(2,2))
+# one-factor boxplot. export
+par(mfrow=c(1,3))
 boxplot(total_pcc~total_name_pcc,data=v_one_p,main="GO_PCC",las=2,
-        outcol="grey",whiskcol="grey",staplecol="grey",
+        outcol="grey",whiskcol="grey",staplecol="grey",cex.axis=2,
         names=c("12","36","65","108","270","404","1266","six","fifteen","protein"));box(lwd=2)
+points(mean_pcc,col="black",pch=8)
 
 boxplot(total_mrnet~total_name_mrnet,data=v_one_m,main="GO_MRNET",las=2,
-        outcol="grey",whiskcol="grey",staplecol="grey",
+        outcol="grey",whiskcol="grey",staplecol="grey",cex.axis=2,
         names=c("12","36","65","108","270","404","1266","six","fifteen","protein"));box(lwd=2)
+points(mean_mrnet,col="black",pch=8)
+
 
 boxplot(total_clr~total_name_clr,data=v_one_c,main="GO_CLR",las=2,
-        outcol="grey",whiskcol="grey",staplecol="grey",
+        outcol="grey",whiskcol="grey",staplecol="grey",cex.axis=2,
         names=c("12","36","65","108","270","404","1266","six","fifteen","protein"));box(lwd=2)
+points(mean_clr,col="black",pch=8)
+
 
 # Add together
 # one-way anova PCC
@@ -205,58 +216,94 @@ v_one_p <- data.frame(total_pcc,total_name_pcc)
 aov_one_p <- aov(total_pcc~total_name_pcc,data=v_one_p) 
 summary(aov_one_p)
 TukeyHSD(aov_one_p)
-pairwise.wilcox.test(total_pcc,total_name_pcc,p.adjust.method = "b")
+pairwise.wilcox.test(total_pcc,total_name_pcc,p.adjust.method = "b",correct=F)
+total_name_pcc <- factor(total_name_pcc,level = c("12","36","65","108","270","404","1266",
+          "six","fifteen","protein"))
+pairwise.t.test(total_pcc,total_name_pcc,p.adjust.method = "b",pool.sd = F,paired = F)
 
 # one-way anova MRNET
 v_one_m <- data.frame(total_mrnet,total_name_mrnet) 
 aov_one_m <- aov(total_mrnet~total_name_mrnet,data=v_one_m) 
 summary(aov_one_m)
 TukeyHSD(aov_one_m)
-pairwise.wilcox.test(total_mrnet,total_name_mrnet,p.adjust.method = "b")
+
+pairwise.wilcox.test(total_mrnet,total_name_mrnet,p.adjust.method = "b",correct=F)
+total_name_mrnet <- factor(total_name_mrnet,level = c("12","36","65","108","270","404","1266",
+                                                  "six","fifteen","protein"))
+pairwise.t.test(total_mrnet,total_name_mrnet,p.adjust.method = "b",pool.sd = F,paired = F)
 
 # one-way anova CLR
 v_one_c <- data.frame(total_clr,total_name_clr) 
 aov_one_c <- aov(total_clr~total_name_clr,data=v_one_c) 
 summary(aov_one_c)
 TukeyHSD(aov_one_c)
-pairwise.wilcox.test(total_clr,total_name_clr,p.adjust.method = "b")
 
-v_one_p$total_name_pcc <- factor(v_one_p$total_name_pcc,
-                                 level = c("12","36","65","108","270","404","1266",
-                                           "six","all_15","protein"))
+pairwise.wilcox.test(total_clr,total_name_clr,p.adjust.method = "b",correct=F)
+total_name_clr <- factor(total_name_clr,level = c("12","36","65","108","270","404","1266",
+                                                  "six","fifteen","protein"))
+pairwise.t.test(total_clr,total_name_clr,p.adjust.method = "b",pool.sd = F,paired = F)
+
+# compare 1266, six and fifteen networks among three methods.
+p_pcc_1266 <- GO_cpm_pcc[[1]][,1];p_pcc_six <- GO_pcc_agg_ntwk[[1]][,1];
+p_pcc_fif <- GO_agg_pcc_noRank[[1]][,1]
+
+p_mrnet_1266 <- GO_cpm_mrnet[[1]][,1];p_mrnet_six <- GO_mrnet_agg_ntwk[[1]][,1];
+p_mrnet_fif <- GO_agg_mrnet_noRank[[1]][,1];
+
+p_clr_1266 <- GO_cpm_clr[[1]][,1];p_clr_six <- GO_clr_agg_ntwk[[1]][,1];
+p_clr_fif <- GO_agg_clr_noRank[[1]][,1];
+
+all_1266 <- c(p_pcc_1266,p_mrnet_1266,p_clr_1266)
+all_1266_name <- c(rep("pcc",277),rep("mrnet",277),rep("clr",277))
+
+all_six <- c(p_pcc_six,p_mrnet_six,p_clr_six)
+all_six_name <- c(rep("pcc",277),rep("mrnet",277),rep("clr",277))
+
+all_fif <- c(p_pcc_fif,p_mrnet_fif,p_clr_fif)
+all_fif_name <- c(rep("pcc",277),rep("mrnet",277),rep("clr",277))
+
+pairwise.wilcox.test(all_1266,all_1266_name,p.adjust.method = 'b',paired = F)
+pairwise.wilcox.test(all_six,all_six_name,p.adjust.method = 'b',paired = F)
+pairwise.wilcox.test(all_fif,all_fif_name,p.adjust.method = 'b',paired = F)
+# 
+# 
+# v_one_p$total_name_pcc <- factor(v_one_p$total_name_pcc,
+#                                  level = c("12","36","65","108","270","404","1266",
+#                                            "six","all_15","protein"))
+# 
+# 
+# v_one_m$total_name_mrnet <- factor(v_one_m$total_name_mrnet,
+#                                  level = c("12","36","65","108","270","404","1266",
+#                                            "six","all_15","protein"))
+# 
+# v_one_c$total_name_clr <- factor(v_one_c$total_name_clr,
+#                     level = c("12","36","65","108","270","404","1266",
+#                               "six","all_15","protein"))
+# 
+# #total 
+# total_value <- c(total_pcc,total_mrnet,total_clr)
+# total_netname <- c(total_name_pcc,total_name_mrnet,total_name_clr)
+# total_constructMethod <- c(method_pcc,method_mrnet,method_clr)
+# 
+# v2 <- data.frame(total_value,total_netname,total_constructMethod)
+# 
+# ######
+# # since the inteaction is significant, should be this one instead.
+# a2 <- aov(total_value ~ total_netname*total_constructMethod,data=v2)
+# res<-a2$residuals
+# hist(res,main="Histogram of residuals",xlab="Residuals")
+# summary(a2)
+# par(mar=c(5,5,4,2))
+# # this plot is the same as what I drew for the mean. redundent.
+# interaction.plot(total_netname,total_constructMethod,total_value,type="b",
+#                  col=c("red","green","blue"),lwd=2,bty="n",cex.axis=1.2,
+#                  cex.lab=1.2) 
+# box(lwd=2)
+# tky2 <- TukeyHSD(a2)
+# tky2
 
 
-v_one_m$total_name_mrnet <- factor(v_one_m$total_name_mrnet,
-                                 level = c("12","36","65","108","270","404","1266",
-                                           "six","all_15","protein"))
-
-v_one_c$total_name_clr <- factor(v_one_c$total_name_clr,
-                    level = c("12","36","65","108","270","404","1266",
-                              "six","all_15","protein"))
-
-#total 
-total_value <- c(total_pcc,total_mrnet,total_clr)
-total_netname <- c(total_name_pcc,total_name_mrnet,total_name_clr)
-total_constructMethod <- c(method_pcc,method_mrnet,method_clr)
-
-v2 <- data.frame(total_value,total_netname,total_constructMethod)
-
-######
-# since the inteaction is significant, should be this one instead.
-a2 <- aov(total_value ~ total_netname*total_constructMethod,data=v2)
-res<-a2$residuals
-hist(res,main="Histogram of residuals",xlab="Residuals")
-summary(a2)
-par(mar=c(5,5,4,2))
-# this plot is the same as what I drew for the mean. redundent.
-interaction.plot(total_netname,total_constructMethod,total_value,type="b",
-                 col=c("red","green","blue"),lwd=2,bty="n",cex.axis=1.2,
-                 cex.lab=1.2) 
-box(lwd=2)
-tky2 <- TukeyHSD(a2)
-tky2
-
-
+# plot everything together. 
 v2$total_netname <- factor(v2$total_netname,
                            c("12","36","65","108","270","404","1266","six","fifteen","protein"))
 v2$total_constructMethod <- factor(v2$total_constructMethod,c("pcc","mrnet","clr"))
@@ -269,25 +316,25 @@ boxplot(total_value~total_constructMethod*total_netname,data = v2,las=2,yaxt="n"
 box(lwd=2);axis(2,cex.axis=1.5,las=1)
 
 
-
-
-
-# Two-way anova and pairwise comparison
-v2$total_constructMethod <- factor(v2$total_constructMethod,levels = c("pcc","mrnet","clr"))
-v2$total_netname <- factor(v2$total_netname,
-                           level = c("12","36","65","108","270","404","1266",
-                                     "six","all_15","protein"))
-# plot is the same as plot singe var.
-par(mfrow=c(1,2)) # export pdf 16*9
-plot(total_value ~ total_netname*total_constructMethod,data=v2,ylab = "AUC",xlab="var")
-
-anova(lm(total_value ~ total_netname*total_constructMethod,data=v2)) # show anova table directly
-
-
-pairwise.t.test(total_value, total_netname, p.adjust="bonferroni")
-pairwise.t.test(total_value, total_constructMethod, p.adjust="bonferroni")
-
-pairwise.wilcox.test(total_value, total_netname, p.adjust="bonferroni")
-pairwise.wilcox.test(total_value, total_constructMethod, p.adjust="bonferroni")
-
-
+# 
+# 
+# 
+# # Two-way anova and pairwise comparison
+# v2$total_constructMethod <- factor(v2$total_constructMethod,levels = c("pcc","mrnet","clr"))
+# v2$total_netname <- factor(v2$total_netname,
+#                            level = c("12","36","65","108","270","404","1266",
+#                                      "six","all_15","protein"))
+# # plot is the same as plot singe var.
+# par(mfrow=c(1,2)) # export pdf 16*9
+# plot(total_value ~ total_netname*total_constructMethod,data=v2,ylab = "AUC",xlab="var")
+# 
+# anova(lm(total_value ~ total_netname*total_constructMethod,data=v2)) # show anova table directly
+# 
+# 
+# pairwise.t.test(total_value, total_netname, p.adjust="bonferroni")
+# pairwise.t.test(total_value, total_constructMethod, p.adjust="bonferroni")
+# 
+# pairwise.wilcox.test(total_value, total_netname, p.adjust="bonferroni")
+# pairwise.wilcox.test(total_value, total_constructMethod, p.adjust="bonferroni")
+# 
+# 
