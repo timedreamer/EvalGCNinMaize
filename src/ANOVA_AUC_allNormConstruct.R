@@ -211,12 +211,21 @@ total_normMethod <- c(norm_vst,norm_cpm,norm_rpkm)
 
 
 v3 <- data.frame(total_value,total_construct,total_normMethod)
-
+# Two-way anova and pairwise comparison
+v3$total_normMethod <- factor(v3$total_normMethod,levels = c("vst","cpm","rpkm"))
+v3$total_construct <- factor(v3$total_construct,
+                             level = c("pcc","scc","kcc","gcc","bicor","aa","ma",
+                                       "mrnet","clr"))
 
 a3 <- aov(total_value ~ total_construct*total_normMethod,data=v3)
 res<-a3$residuals
 hist(res,main="Histogram of residuals",xlab="Residuals")
 summary(a3)
+
+# plot is the same as plot singe var.
+par(mfrow=c(1,2)) # export pdf 15*9
+plot(total_value ~ total_construct*total_normMethod, data=v3,ylab = "AUC",xlab="var",main= "GO_aov")
+
 par(mar=c(5,5,4,2))
 # this plot is the same as what I drew for the mean. redundent.
 interaction.plot(total_netname,total_constructMethod,total_value,type="b",
