@@ -25,10 +25,14 @@ load("~/Co-expression/Normalization result/FromNewScript_Oct2016/AUC_PTY_PP/aggr
 auc_aggSixAgg_mrnet <- auc_agg_test
 load("~/Co-expression/Normalization result/FromNewScript_Oct2016/AUC_PTY_PP/aggregate_ntwk/agg_cpm_clr_PPPTY.RData")
 auc_aggSixAgg_clr <- auc_agg_test;rm(auc_agg_test)
+
 #GO_sixAggregate
 load("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk\\six\\agg_cpm_pcc_GO_noRank.RData")
+GO_six_pcc <- GO_agg_pcc_noRank;rm(GO_agg_pcc_noRank)
 load("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk\\six\\agg_cpm_mrnet_GO_noRank.RData")
+GO_six_mrnet <- GO_agg_mrnet_noRank ;rm(GO_agg_mrnet_noRank)
 load("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk\\six\\agg_cpm_clr_GO_noRank.RData")
+GO_six_clr <- GO_agg_clr_noRank ;rm(GO_agg_clr_noRank)
 
 #PPPTY_15Aggregate
 load("~/Co-expression/aggregate_ntwk/withExp14_total15Exps/agg_cpm_pccAll_PPPTY_noRank.RData")
@@ -56,14 +60,15 @@ p_270 <- unlist(unname(auc_270_pcc));names(p_270) <- rep("270",1721)
 p_404 <- unlist(unname(auc_404_pcc));names(p_404) <- rep("404",1721)
 p_1266 <- unlist(unname(auc_cpm_pcc));names(p_1266) <- rep("1266",1721)
 p_six <- unlist(unname(auc_aggSixAgg_pcc));names(p_six) <- rep("six",1721)
-p_fif <- unlist(unname(auc_agg_pcc_noRank));names(p_fif) <- rep("all_15",1721)
+p_fif <- unlist(unname(auc_agg_pcc_noRank));names(p_fif) <- rep("fifteen",1721)
 p_pr <- unlist(unname(auc_pr_norm_pcc));names(p_pr) <- rep("protein",2402)
 
 
 total_pcc <- c(p_12,p_36,p_65,p_108,p_270,p_404,p_1266,p_six,p_fif,p_pr)
 total_name_pcc <- c(names(p_12),names(p_36),names(p_65),names(p_108),names(p_270),
-                    names(p_404),names(p_1266),names(p_six),names(p_fif),names(p_pr))
-method_pcc <- rep("pcc",17891) # 1721*9+2402
+                      names(p_404),names(p_1266),names(p_six),names(p_fif),names(p_pr))
+method_pcc <- rep("pcc",17891)
+
 
 #MRNET
 p_12 <- unlist(unname(auc_12_mrnet));names(p_12) <- rep("12",1721)
@@ -74,7 +79,7 @@ p_270 <- unlist(unname(auc_270_mrnet));names(p_270) <- rep("270",1721)
 p_404 <- unlist(unname(auc_404_mrnet));names(p_404) <- rep("404",1721)
 p_1266 <- unlist(unname(auc_cpm_mrnet));names(p_1266) <- rep("1266",1721)
 p_six <- unlist(unname(auc_aggSixAgg_mrnet));names(p_six) <- rep("six",1721)
-p_fif <- unlist(unname(auc_agg_mrnet_noRank));names(p_fif) <- rep("all_15",1721)
+p_fif <- unlist(unname(auc_agg_mrnet_noRank));names(p_fif) <- rep("fifteen",1721)
 p_pr <- unlist(unname(auc_pr_norm_mrnet));names(p_pr) <- rep("protein",2402)
 
 
@@ -92,7 +97,7 @@ p_270 <- unlist(unname(auc_270_clr));names(p_270) <- rep("270",1721)
 p_404 <- unlist(unname(auc_404_clr));names(p_404) <- rep("404",1721)
 p_1266 <- unlist(unname(auc_cpm_clr));names(p_1266) <- rep("1266",1721)
 p_six <- unlist(unname(auc_aggSixAgg_clr));names(p_six) <- rep("six",1721)
-p_fif <- unlist(unname(auc_agg_clr_noRank));names(p_fif) <- rep("all_15",1721)
+p_fif <- unlist(unname(auc_agg_clr_noRank));names(p_fif) <- rep("fifteen",1721)
 p_pr <- unlist(unname(auc_pr_norm_clr));names(p_pr) <- rep("protein",2402)
 
 
@@ -108,6 +113,21 @@ total_constructMethod <- c(method_pcc,method_mrnet,method_clr)
 
 
 v2 <- data.frame(total_value,total_netname,total_constructMethod)
+
+# Pairwise Wilconon test PCC
+total_name_pcc <- factor(total_name_pcc,level = c("12","36","65","108","270","404","1266",
+                                                  "six","fifteen","protein"))
+pairwise.wilcox.test(total_pcc,total_name_pcc,p.adjust.method = "b",correct=F)
+
+# Pairwise Wilconon test mrnet
+total_name_mrnet <- factor(total_name_mrnet,level = c("12","36","65","108","270","404","1266",
+                                                  "six","fifteen","protein"))
+pairwise.wilcox.test(total_mrnet,total_name_mrnet,p.adjust.method = "b",correct=F)
+
+# Pairwise Wilconon test clr
+total_name_clr <- factor(total_name_clr,level = c("12","36","65","108","270","404","1266",
+                                                  "six","fifteen","protein"))
+pairwise.wilcox.test(total_clr,total_name_clr,p.adjust.method = "b",correct=F)
 
 
 ######
@@ -152,7 +172,7 @@ pairwise.wilcox.test(total_value, total_constructMethod, p.adjust="bonferroni")
 #PCC
 p_12 <- GO_12_pcc[[1]][,1];p_36 <- GO_36_pcc[[1]][,1];p_65 <- GO_65_pcc[[1]][,1]
 p_108 <- GO_108_pcc[[1]][,1];p_270 <- GO_270_pcc[[1]][,1];p_404 <- GO_404_pcc[[1]][,1]
-p_1266 <- GO_cpm_pcc[[1]][,1];p_six <- GO_pcc_agg_ntwk[[1]][,1];
+p_1266 <- GO_cpm_pcc[[1]][,1];p_six <- GO_six_pcc[[1]][,1];
 p_fif <- GO_agg_pcc_noRank[[1]][,1];p_pr <- GO_pr_pcc[[1]][,1]
 
 total_pcc <- c(p_12,p_36,p_65,p_108,p_270,p_404,p_1266,p_six,p_fif,p_pr)
@@ -166,7 +186,7 @@ mean_pcc <- c(mean(p_12),mean(p_36),mean(p_65),mean(p_108),mean(p_270),mean(p_40
 #MRNET
 p_12 <- GO_12_mrnet[[1]][,1];p_36 <- GO_36_mrnet[[1]][,1];p_65 <- GO_65_mrnet[[1]][,1]
 p_108 <- GO_108_mrnet[[1]][,1];p_270 <- GO_270_mrnet[[1]][,1];p_404 <- GO_404_mrnet[[1]][,1]
-p_1266 <- GO_cpm_mrnet[[1]][,1];p_six <- GO_mrnet_agg_ntwk[[1]][,1];
+p_1266 <- GO_cpm_mrnet[[1]][,1];p_six <- GO_six_mrnet[[1]][,1];
 p_fif <- GO_agg_mrnet_noRank[[1]][,1];p_pr <- GO_pr_mrnet[[1]][,1]
 
 total_mrnet <- c(p_12,p_36,p_65,p_108,p_270,p_404,p_1266,p_six,p_fif,p_pr)
@@ -180,7 +200,7 @@ mean_mrnet <- c(mean(p_12),mean(p_36),mean(p_65),mean(p_108),mean(p_270),mean(p_
 #CLR
 p_12 <- GO_12_clr[[1]][,1];p_36 <- GO_36_clr[[1]][,1];p_65 <- GO_65_clr[[1]][,1]
 p_108 <- GO_108_clr[[1]][,1];p_270 <- GO_270_clr[[1]][,1];p_404 <- GO_404_clr[[1]][,1]
-p_1266 <- GO_cpm_clr[[1]][,1];p_six <- GO_clr_agg_ntwk[[1]][,1];
+p_1266 <- GO_cpm_clr[[1]][,1];p_six <- GO_six_clr[[1]][,1];
 p_fif <- GO_agg_clr_noRank[[1]][,1];p_pr <- GO_pr_clr[[1]][,1]
 
 total_clr <- c(p_12,p_36,p_65,p_108,p_270,p_404,p_1266,p_six,p_fif,p_pr)
