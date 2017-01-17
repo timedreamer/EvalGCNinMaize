@@ -179,3 +179,54 @@ pairwise.wilcox.test(agg,agg_name,p.adjust.method = 'b')
 
 total_1363 <- cbind(ap,am,ac);total_1363Name <- c(rep("pcc",3138),rep("mrnet",3138),rep("clr",3138))
 pairwise.wilcox.test(total_1363,total_1363Name,p.adjust.method = 'b')
+
+
+################calculation for Ranked arabidopsis aggregation network
+load("~/Co-expression/arabidopsis/agg_rank/arab_agg_ntwkRank_pcc.Rdata")
+load("~/Co-expression/arabidopsis/agg_rank/arab_agg_ntwkRank_mrnet.Rdata")
+load("~/Co-expression/arabidopsis/agg_rank/arab_agg_ntwkRank_clr.Rdata")
+
+GO_arab_aggRank_pcc <- run_GBA(agg_ntwk_pccRank,annotations_sub)
+GO_arab_aggRank_pcc[[3]]
+save(GO_arab_aggRank_pcc,file="GO_arab_aggRank_pcc.RData")
+
+GO_arab_aggRank_mrnet <- run_GBA(agg_ntwk_mrnetRank,annotations_sub)
+save(GO_arab_aggRank_mrnet,file="GO_arab_aggRank_mrnet.RData")
+
+GO_arab_aggRank_clr <- run_GBA(agg_ntwk_clrRank,annotations_sub)
+save(GO_arab_aggRank_clr,file="GO_arab_aggRank_clr.RData")
+
+p <- GO_arab_aggRank_pcc[[1]][,1];m <- GO_arab_aggRank_mrnet[[1]][,1]
+c <- GO_arab_aggRank_clr[[1]][,1]
+arabRank_total <- c(p,m,c)
+arabRank_total_name <- c(rep('pcc',445),rep('mrnet',445),rep('clr',445))
+rm(p,m,c)
+pairwise.wilcox.test(arabRank_total,arabRank_total_name,p.adjust.method = 'b',correct=F)
+
+## PP
+
+filter_node_name <- node_name[which(node_name %in% colnames(agg_ntwk_pccRank))]
+cogene_result <- cogene_result[names(cogene_result) %in% filter_node_name]
+
+ara_pcc_new <- (agg_ntwk_pccRank - mean(agg_ntwk_pccRank))/sd(agg_ntwk_pccRank) 
+
+# the pcc correlaition matrix was right shifted a little.
+# this cause AUROC higher, like what happend for RC.So I did a normalization.
+ara_pcc_ft <- ara_pcc_new[,which(colnames(ara_pcc_new) %in% filter_node_name)] # dim vst_gcc_ft 15116*753                        #
+auc_ara_pcc <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=ara_pcc_new);
+mean(unlist(auc_ara_pcc))
+auc_ara_pccRank <- auc_ara_pcc
+
+ara_mrnet_ft <- agg_ntwk_mrnetRank[,which(colnames(agg_ntwk_mrnetRank) %in% filter_node_name)] # dim vst_gcc_ft 15116*753                        #
+auc_ara_mrnet <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=agg_ntwk_mrnetRank);
+mean(unlist(auc_ara_mrnet));
+auc_ara_mrnetRank <- auc_ara_mrnet
+
+ara_clr_ft <- agg_ntwk_clrRank[,which(colnames(agg_ntwk_clrRank) %in% filter_node_name)] # dim vst_gcc_ft 15116*753                        #
+auc_ara_clr <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=agg_ntwk_clrRank);
+mean(unlist(auc_ara_clr))
+auc_ara_clrRank <- auc_ara_clr
+
+save(auc_ara_pccRank,auc_ara_mrnetRank,auc_ara_clrRank,file="arab_PPPTY_aggRank.RData")
+
+
