@@ -23,7 +23,7 @@ load("./12/12_cpm_mrnet.RData");load("./36/36_cpm_mrnet.RData");load("./65/65_cp
 load("./108/108_cpm_mrnet.RData");load("270/270_cpm_mrnet.RData");load("404/404_cpm_mrnet.RData")
 load("Exp7/exp7_cpm_mrnet.RData");load("Exp8/exp8_cpm_mrnet.RData");load("Exp8/exp8_cpm_mrnet.RData")
 load("Exp9/exp9_cpm_mrnet.RData");load("Exp10/exp10_cpm_mrnet.RData");load("Exp11/exp11_cpm_mrnet.RData")
-load("Exp12/exp12_cpm_mrnet.RData");load("Exp13/exp13_cpm_mrnet.RData");load("Exp13/exp13_cpm_mrnet.RData")
+load("Exp12/exp12_cpm_mrnet.RData");load("Exp13/exp13_cpm_mrnet.RData");load("Exp14/exp14_cpm_mrnet.RData")
 load("Exp15/exp15_cpm_mrnet.RData")
 
 
@@ -32,7 +32,7 @@ load("./12/12_cpm_clr.RData");load("./36/36_cpm_clr.RData");load("./65/65_cpm_cl
 load("./108/108_cpm_clr.RData");load("270/270_cpm_clr.RData");load("404/404_cpm_clr.RData")
 load("Exp7/exp7_cpm_clr.RData");load("Exp8/exp8_cpm_clr.RData");load("Exp8/exp8_cpm_clr.RData")
 load("Exp9/exp9_cpm_clr.RData");load("Exp10/exp10_cpm_clr.RData");load("Exp11/exp11_cpm_clr.RData")
-load("Exp12/exp12_cpm_clr.RData");load("Exp13/exp13_cpm_clr.RData");load("Exp13/exp13_cpm_clr.RData")
+load("Exp12/exp12_cpm_clr.RData");load("Exp13/exp13_cpm_clr.RData");load("Exp14/exp14_cpm_clr.RData")
 load("Exp15/exp15_cpm_clr.RData")
 
 
@@ -119,5 +119,83 @@ agg_RankntwkPcc <- cpm_12pcc_rank+cpm_36pcc_rank+cpm_65pcc_rank+cpm_108pcc_rank+
 save(agg_RankntwkPcc,file="maizeAgg_Rankpcc.RData")
 
 GO_agg_rankPccMaize <- run_GBA(agg_RankntwkPcc,annotations_sub)
+save(GO_agg_rankPccMaize,file="GO_agg_rankPcc_Maize.RData")
+rm(list=ls(pattern = "cpm*"))
 GO_agg_rankPccMaize[[3]] # 0.75811
 GO_agg_pcc_noRank[[3]] # 0.7201086
+
+
+setwd("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk\\MaizeRank\\mrnet/")
+file_names=as.list(dir(pattern="cpm*"))
+file_names
+lapply(file_names,load,.GlobalEnv)
+
+agg_Rankntwkmrnet <- cpm_12mrnet_rank+cpm_36mrnet_rank+cpm_65mrnet_rank+cpm_108mrnet_rank+cpm_270mrnet_rank +
+  cpm_404mrnet_rank + cpmexp8_mrnet_rank + cpmexp9_mrnet_rank + cpmexp10_mrnet_rank + cpmexp11_mrnet_rank +
+  cpmexp12_mrnet_rank + cpmexp13_mrnet_rank + cpmexp14_mrnet_rank + cpmexp15_mrnet_rank + cpmexp7_mrnet_rank
+
+save(agg_Rankntwkmrnet,file="maizeAgg_Rankmrnet.RData")
+
+GO_agg_rankMrnetMaize <- run_GBA(agg_Rankntwkmrnet,annotations_sub)
+save(GO_agg_rankMrnetMaize,file="GO_agg_rankMrnet_Maize.RData")
+rm(list=ls(pattern = "cpm*"))
+
+setwd("D:\\Users\\jhuang\\Documents\\Co-expression\\aggregate_ntwk\\MaizeRank\\clr//")
+file_names=as.list(dir(pattern="cpm*"))
+file_names
+lapply(file_names,load,.GlobalEnv)
+
+agg_Rankntwkclr <- cpm_12clr_rank+cpm_36clr_rank+cpm_65clr_rank+cpm_108clr_rank+cpm_270clr_rank +
+  cpm_404clr_rank + cpmexp8_clr_rank + cpmexp9_clr_rank + cpmexp10_clr_rank + cpmexp11_clr_rank +
+  cpmexp12_clr_rank + cpmexp13_clr_rank + cpmexp14_clr_rank + cpmexp15_clr_rank + cpmexp7_clr_rank
+
+save(agg_Rankntwkclr,file="maizeAgg_Rankclr.RData")
+
+GO_agg_rankClrMaize <- run_GBA(agg_Rankntwkclr,annotations_sub)
+save(GO_agg_rankClrMaize,file="GO_agg_rankClr_Maize.RData")
+rm(list=ls(pattern = "cpm*"))
+
+
+##PPPTY evaluation
+library(ROCR)
+setwd("~/Co-expression/Normalization result/FromNewScript_Oct2016/AUC_PTY_PP")
+load("4704_nodeName.RData") # from higher than 5 genes connected
+load("4704_PP_PTY_combine_list.RData")
+
+
+calc_auc <- function(corMatrix,x){
+  t1 <- abs(corMatrix[,x])
+  m1 <- data.frame(matrix(nrow = 15116,ncol=3))
+  m1[,1] <- as.character();m1[,2] <- as.double();m1[,3] <- 0
+  m1[,1] <- names(t1);m1[,2] <- t1;m1[which(m1[,1] %in% cogene_result[[x]]),3] <- 1
+  if (length(table(m1[,3]))==2){
+    pred <- prediction(m1[,2],m1[,3])
+    auc <- performance(pred,"auc");auc <- unlist(slot(auc, "y.values"))
+  } else {
+    auc <- NULL
+  }
+  return(auc)
+}
+
+load("~/Co-expression/aggregate_ntwk/MaizeRank/clr/maizeAgg_Rankclr.RData")
+load("~/Co-expression/aggregate_ntwk/MaizeRank/mrnet/maizeAgg_Rankmrnet.RData")
+load("~/Co-expression/aggregate_ntwk/MaizeRank/pcc/maizeAgg_Rankpcc.RData")
+
+# may change the data here to get filter_node_name
+filter_node_name <- node_name[which(node_name %in% colnames(agg_Rankntwkclr))]
+cogene_result <- cogene_result[names(cogene_result) %in% filter_node_name]
+
+agg_rank_pcc_maize <- agg_RankntwkPcc[,which(colnames(agg_RankntwkPcc) %in% filter_node_name)] #                      #
+auc_aggRank_pcc_maize <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=agg_rank_pcc_maize)                   #
+mean(unlist(auc_aggRank_pcc_maize)) #
+
+agg_rank_mrnet_maize <- agg_Rankntwkmrnet[,which(colnames(agg_Rankntwkmrnet) %in% filter_node_name)] #                      #
+auc_aggRank_mrnet_maize <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=agg_rank_mrnet_maize)                   #
+mean(unlist(auc_aggRank_mrnet_maize)) #
+
+agg_rank_clr_maize <- agg_Rankntwkclr[,which(colnames(agg_Rankntwkclr) %in% filter_node_name)] #                      #
+auc_aggRank_clr_maize <- sapply(X = filter_node_name,FUN = calc_auc,corMatrix=agg_rank_clr_maize)                   #
+mean(unlist(auc_aggRank_clr_maize))
+
+save(auc_aggRank_pcc_maize,auc_aggRank_mrnet_maize,auc_aggRank_clr_maize,
+     file="agg_rank_maize_PPPTYResult.RData")
