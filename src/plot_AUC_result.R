@@ -86,12 +86,26 @@ legend("topleft",c("pcc","mrnet","clr"),lty=c(1,1,1),
        col=c("black","red","blue"),lwd=2,cex=1.5) 
 # export pdf as 10*9
 
+# plot as points
+par(mar=c(7,6,3,1))
+plot(pcc,type="p",col="black",xaxt="n",ylim=c(0.5,0.78), main="",
+     ylab="mean AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5,pch=0)
+lines(mrnet,type="p",col="black",lwd=2.5,pch=19)
+lines(clr,type="p",col="black",lwd=2.5,pch=1)
+axis(1, at=1:10, labels=c(12,36,65,108,270,404,1266,"agg_6","agg_15","protein"),
+     cex.axis=1.5,cex.lab=1.5,las=2)
+legend("topleft",c("pcc","mrnet","clr"),lty=c(NA,NA,NA),
+       lwd=2,cex=1.5,pch=c(0,19,1)) 
+# export pdf as 10*9
+
+
 # PP_PTY
 result_pp <- read.delim("result_PP_PTY_AUC.txt",sep="\t",header=T)
 pcc <- result_pp$pcc
 mrnet <- result_pp$mrnet
 clr <- result_pp$clr
 
+# export pdf as 10*9
 par(mar=c(6,6,3,1))
 plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.63), main="",
      ylab="mean AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
@@ -101,7 +115,30 @@ axis(1, at=1:10, labels=c(12,36,65,108,270,404,1266,"six","all","protein"),
      cex.axis=1.5,cex.lab=2)
 legend("topleft",c("pcc","mrnet","clr"),lty=c(1,1,1),
        col=c("black","red","blue"),lwd=2,cex=1.5)
-# export pdf as 10*9
+
+# export pdf as 6*6. Only B&W point
+par(mar=c(7,6,3,1))
+plot(pcc,type="p",col="black",xaxt="n",ylim=c(0.5,0.63), main="",pch=0,
+     ylab="mean AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
+lines(mrnet,type="p",lwd=2.5,pch=19)
+lines(clr,type= "p",lwd=2.5,pch=1)
+axis(1, at=1:10, labels=c(12,36,65,108,270,404,1266,"agg_six","agg_15","protein"),
+     cex.axis=1.5,cex.lab=2,las=2)
+legend("topleft",c("pcc","mrnet","clr"),lty=c(NA,NA,NA),pch=c(0,19,1),
+       lwd=2,cex=1.5)
 
 
 
+
+##########################################
+# Plot linear regression
+result_go <- read.delim("result_GOAUC_maize_linearRegression.txt",sep="\t",header=T)
+colnames(result_go)
+pcc <- result_go$pcc
+mrnet <- result_go$mrnet
+clr <- result_go$clr
+sample <- c(12,36,65,108,270,404,1266)
+s1 <- c(1,2,3,4,5,6,7)
+
+tt <- lm(clr ~ s1)
+summary(tt)
