@@ -2,65 +2,89 @@
 # For correlation, change diag to 0 to avoid self-connections.
 # The resulting SIF can be imported in Cytoscape.
 
+#Maize Final Network
 # KIN3077 Windows
 library(igraph)
-load("~/Co-expression/aggregate_ntwk/agg15_ntwkPCC.Rdata")
-load("~/Co-expression/aggregate_ntwk/agg15_ntwkMrnet.Rdata")
-load("~/Co-expression/aggregate_ntwk/agg15_ntwkClr.Rdata")
+load("~/Co-expression/aggregate_ntwk/MaizeRank/pcc/maizeAgg_Rankpcc.RData") # PCC use agg15 Rank
+# MRNET and CLR use 1266 one matrix data
+load("~/Co-expression/Normalization result/FromNewScript_Oct2016/cpm_20161024/cpm_four_MI.RData")
+rm(cpm_aa,cpm_ma)
 
-# CPM_all_fifteen_maize
-# use absolute value
-agg15_ntwkPcc <- abs(agg15_ntwkPcc)
-diag(agg15_ntwkPcc) <- 0
 
-#choose threshold.top 1 Million 
-one_million <- 1e06/(15116*15116)
-
-threshold <- quantile(agg15_ntwkPcc,1-one_million)
-
-ptm <- proc.time()
-g  <- graph.adjacency((agg15_ntwkPcc+t(agg15_ntwkPcc))/2,mode = "undirected",weighted=TRUE)
+# PCC_rank_15experiments
+diag(agg_RankntwkPcc) <- 0
+#choose threshold.top 1 Million
+one_million <- 2e06/(15116*15116)
+g  <- graph.adjacency((agg_RankntwkPcc+t(agg_RankntwkPcc))/2,mode = "undirected",weighted=TRUE)
 df <- get.data.frame(g)
 head(df)
+threshold <- quantile(df[,3],1-one_million)
 df_pass1 <- subset(df,weight>threshold)
-write.table(df_pass1,file = paste0("agg15_ntwkPcc_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
-proc.time() - ptm # For threshold top 1million, 80.73s
+write.table(df_pass1,file = paste0("agg_RankntwkPcc_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
 
 
-# MRNET_all_fifteen_maize
-# use absolute value
-agg15_ntwkMrnet <- abs(agg15_ntwkMrnet)
-diag(agg15_ntwkMrnet) <- 0
-
-#choose threshold.top 1 Million 
-one_million <- 1e06/(15116*15116)
-
-threshold <- quantile(agg15_ntwkMrnet,1-one_million)
-
-ptm <- proc.time()
-g  <- graph.adjacency((agg15_ntwkMrnet+t(agg15_ntwkMrnet))/2,mode = "undirected",weighted=TRUE)
+# MRNET 1266 maize
+diag(cpm_mrnet) <- 0
+#choose threshold.top 1 Million
+one_million <- 1e06/(73689151)
+g  <- graph.adjacency((cpm_mrnet+t(cpm_mrnet))/2,mode = "undirected",weighted=TRUE)
 df <- get.data.frame(g)
 head(df)
+threshold <- quantile(df[,3],1-one_million)
 df_pass1 <- subset(df,weight>threshold)
-write.table(df_pass1,file = paste0("agg15_ntwkMrnet_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
-proc.time() - ptm # For threshold top 1million, 80.45s
+write.table(df_pass1,file = paste0("cpm_mrnet_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
 
 
-
-# CLR_all_fifteen_maize
-# use absolute value
-agg15_ntwkClr <- abs(agg15_ntwkClr)
-diag(agg15_ntwkClr) <- 0
-
-#choose threshold.top 1 Million 
-one_million <- 1e06/(15116*15116)
-
-threshold <- quantile(agg15_ntwkClr,1-one_million)
-
-ptm <- proc.time()
-g  <- graph.adjacency((agg15_ntwkClr+t(agg15_ntwkClr))/2,mode = "undirected",weighted=TRUE)
+# CLR_1266_maize.
+diag(cpm_clr) <- 0
+#choose threshold.top 1 Million
+one_million <- 1e06/(73201950)
+g  <- graph.adjacency((cpm_clr+t(cpm_clr))/2,mode = "undirected",weighted=TRUE)
 df <- get.data.frame(g)
 head(df)
+threshold <- quantile(df[,3],1-one_million)
 df_pass1 <- subset(df,weight>threshold)
-write.table(df_pass1,file = paste0("agg15_ntwkClr_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
-proc.time() - ptm # For threshold top 1million, 80.85s
+write.table(df_pass1,file = paste0("cpm_clr_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
+
+
+#############################################
+##Arabidopsis Final Network
+############################################
+load("~/Co-expression/finalized_networks/Arabidopsis/arab_agg_ntwkRank_pcc.Rdata")
+load("~/Co-expression/finalized_networks/Arabidopsis/arabidopsis_clr.RData")
+load("~/Co-expression/finalized_networks/Arabidopsis/arabidopsis_mrnet.RData")
+
+
+# PCC_rank_44experiments
+diag(agg_ntwk_pccRank) <- 0
+#choose threshold.top 1 Million
+g  <- graph.adjacency((agg_ntwk_pccRank+t(agg_ntwk_pccRank))/2,mode = "undirected",weighted=TRUE)
+df <- get.data.frame(g)
+head(df)
+one_million <- 1e06/length(df[,3])
+threshold <- quantile(df[,3],1-one_million)
+df_pass1 <- subset(df,weight>threshold)
+write.table(df_pass1,file = paste0("Arab_agg_ntwk_pccRank_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
+
+
+# MRNET 1363 single network
+diag(ara_mrnet) <- 0
+#choose threshold.top 1 Million
+g  <- graph.adjacency((ara_mrnet+t(ara_mrnet))/2,mode = "undirected",weighted=TRUE)
+df <- get.data.frame(g)
+head(df)
+one_million <- 1e06/length(df[,3])
+threshold <- quantile(df[,3],1-one_million)
+df_pass1 <- subset(df,weight>threshold)
+write.table(df_pass1,file = paste0("Arab_ara_mrnet_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
+
+# CLR 1363 single network
+diag(ara_clr) <- 0
+#choose threshold.top 1 Million
+g  <- graph.adjacency((ara_clr+t(ara_clr))/2,mode = "undirected",weighted=TRUE)
+df <- get.data.frame(g)
+head(df)
+one_million <- 1e06/length(df[,3])
+threshold <- quantile(df[,3],1-one_million)
+df_pass1 <- subset(df,weight>threshold)
+write.table(df_pass1,file = paste0("Arab_ara_clr_",round(threshold,3),".SIF"),quote = F,sep = "\t",col.names = T,row.names = F)
