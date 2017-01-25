@@ -1,9 +1,9 @@
 # This script is draw AUC for different normalization method, correlation vs MI method
 # individually. 
 
-# First two figures are to show difference between correlation and MI, to show MI are better.
+# First three figures are to show difference between correlation and MI, to show MI are better.
 # Second two are to show normalization method did not change too much.
-# But yes, RC is wield, if not find a good explaination, then take out.
+# take out RC
 
 setwd("C:\\WORK\\EvalGCNinMaize\\results")
 
@@ -17,25 +17,29 @@ rownames(result_go) <- result_go[,1]
 result_go[,1] <- NULL
 result_go <- result_go[-3,]
 
+# HDA101
+result_hda <- read.delim("fouMethod_HDA101_AUC.txt",sep="\t",header=T)
+rownames(result_hda) <- result_hda[,1]
+result_hda[,1] <- NULL
+result_hda <- result_hda[-3,]
 ###PP_PTY
 
 # Plot individual AUC result by Normalization method, show diff between
 # Correlation and MI
-# export as pdf 10*7
+# export as pdf 10*
 
-par(mfrow=c(1,3),mar=c(7,6,4,1))
+par(mfrow=c(3,3),mar=c(7,6,4,1))
 barplot(as.matrix(result_pp[1,]),main="VST",xpd=F,las=2,
         ylim=c(0.4,0.6),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+abline(h=min(result_pp[1,]),lty=2);abline(h=max(result_pp[1,]),lty=3)
 
 barplot(as.matrix(result_pp[2,]),main="CPM",xpd=F,las=2,
         ylim=c(0.4,0.6),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
-
-# barplot(as.matrix(result_pp[3,]),main="RC",xpd=F,
-#         ylim=c(0.4,0.6),lwd=2.5,cex.axis = 1.5,cex.names = 1.2,col=c(rep("grey",9)))
+abline(h=min(result_pp[2,]),lty=2);abline(h=max(result_pp[2,]),lty=3)
 
 barplot(as.matrix(result_pp[3,]),main="RPKM",xpd=F,las=2,
         ylim=c(0.4,0.6),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
-
+abline(h=min(result_pp[3,]),lty=2);abline(h=max(result_pp[3,]),lty=3)
 
 ###GO
 
@@ -44,20 +48,33 @@ barplot(as.matrix(result_pp[3,]),main="RPKM",xpd=F,las=2,
 # export as pdf 10*7
 
 ####Plot individually, Show diff in Correlation and MI
-par(mfrow=c(1,3),mar=c(7,6,4,1))
+#par(mfrow=c(1,3),mar=c(7,6,4,1))
 barplot(as.matrix(result_go[1,]),main="VST",xpd=F,las=2,
-        ylim=c(0.4,0.74),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+        ylim=c(0.4,0.8),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+abline(h=min(result_go[1,]),lty=2);abline(h=max(result_go[1,]),lty=3)
 
 barplot(as.matrix(result_go[2,]),main="CPM",xpd=F,las=2,
-        ylim=c(0.4,0.74),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
-
-# barplot(as.matrix(result_go[3,]),main="RC",xpd=F,
-#         ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.2,col=c(rep("grey",9)))
+        ylim=c(0.4,0.8),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+abline(h=min(result_go[2,]),lty=2);abline(h=max(result_go[2,]),lty=3)
 
 barplot(as.matrix(result_go[3,]),main="RPKM",xpd=F,las=2,
-        ylim=c(0.4,0.74),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+        ylim=c(0.4,0.8),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+abline(h=min(result_go[3,]),lty=2);abline(h=max(result_go[3,]),lty=3)
+
+###HDA101
 
 
+barplot(as.matrix(result_hda[1,]),main="VST",xpd=F,las=2,
+        ylim=c(0.4,0.7),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+abline(h=min(result_hda[1,]),lty=2);abline(h=max(result_hda[1,]),lty=3)
+
+barplot(as.matrix(result_hda[2,]),main="CPM",xpd=F,las=2,
+        ylim=c(0.4,0.7),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+abline(h=min(result_hda[2,]),lty=2);abline(h=max(result_hda[2,]),lty=3)
+
+barplot(as.matrix(result_hda[3,]),main="RPKM",xpd=F,las=2,
+        ylim=c(0.4,0.7),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+abline(h=min(result_hda[3,]),lty=2);abline(h=max(result_hda[3,]),lty=3)
 
 
 
@@ -105,30 +122,59 @@ barplot(as.matrix(t(result_pp[,9])),main="CLR",names.arg = c("VST","CPM","RPKM")
 
 par(mfrow=c(3,3))
 barplot(as.matrix(t(result_go[,1])),main="PCC",names.arg = c("VST","CPM","RPKM"),
-        xpd=F,ylim=c(0.4,0.71),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F,ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
 barplot(as.matrix(t(result_go[,2])),main="SCC",names.arg = c("VST","CPM","RPKM"),
-        xpd=F,ylim=c(0.4,0.71),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F,ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
 barplot(as.matrix(t(result_go[,3])),main="GCC",names.arg = c("VST","CPM","RPKM"),
-        xpd=F,ylim=c(0.4,0.71),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F,ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
 barplot(as.matrix(t(result_go[,4])),main="KCC",names.arg = c("VST","CPM","RPKM"),
-        xpd=F,ylim=c(0.4,0.71),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F,ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
 barplot(as.matrix(t(result_go[,5])),main="Bicor",names.arg = c("VST","CPM","RPKM"),
-        xpd=F,ylim=c(0.4,0.71),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F,ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
 barplot(as.matrix(t(result_go[,6])),main="AA",names.arg = c("VST","CPM","RPKM"),
-        xpd=F,ylim=c(0.4,0.63),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F,ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
 barplot(as.matrix(t(result_go[,7])),main="MA",names.arg = c("VST","CPM","RPKM"),
-        xpd=F, ylim=c(0.4,0.71),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F, ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
 barplot(as.matrix(t(result_go[,8])),main="MRNET",names.arg = c("VST","CPM","RPKM"),
-        xpd=F,ylim=c(0.4,0.77),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F,ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
 barplot(as.matrix(t(result_go[,9])),main="CLR",names.arg = c("VST","CPM","RPKM"),
-        xpd=F,ylim=c(0.4,0.79),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+        xpd=F,ylim=c(0.4,0.8),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
+
+##HDA101
+par(mfrow=c(3,3))
+barplot(as.matrix(t(result_hda[,1])),main="PCC",names.arg = c("VST","CPM","RPKM"),
+        xpd=F,ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+
+barplot(as.matrix(t(result_hda[,2])),main="SCC",names.arg = c("VST","CPM","RPKM"),
+        xpd=F,ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+
+barplot(as.matrix(t(result_hda[,3])),main="GCC",names.arg = c("VST","CPM","RPKM"),
+        xpd=F,ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+
+barplot(as.matrix(t(result_hda[,4])),main="KCC",names.arg = c("VST","CPM","RPKM"),
+        xpd=F,ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+
+barplot(as.matrix(t(result_hda[,5])),main="Bicor",names.arg = c("VST","CPM","RPKM"),
+        xpd=F,ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+
+barplot(as.matrix(t(result_hda[,6])),main="AA",names.arg = c("VST","CPM","RPKM"),
+        xpd=F,ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+
+barplot(as.matrix(t(result_hda[,7])),main="MA",names.arg = c("VST","CPM","RPKM"),
+        xpd=F, ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+
+barplot(as.matrix(t(result_hda[,8])),main="MRNET",names.arg = c("VST","CPM","RPKM"),
+        xpd=F,ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
+
+barplot(as.matrix(t(result_hda[,9])),main="CLR",names.arg = c("VST","CPM","RPKM"),
+        xpd=F,ylim=c(0.4,0.7),lwd=2.5,cex.axis = 1.5,cex.names = 1.5,col="grey")
 
