@@ -75,16 +75,17 @@ pcc <- result_go$pcc
 mrnet <- result_go$mrnet
 clr <- result_go$clr
 
+# export svg as 600*600
 par(mar=c(6,6,3,1))
-plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.76), main="",
-     ylab="mean AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
+plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.8), main="",
+     ylab="average AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
 lines(mrnet,type="b",col="red",lwd=2.5)
 lines(clr,type="b",col="blue",lwd=2.5)
 axis(1, at=1:10, labels=c(12,36,65,108,270,404,1266,"six","all","protein"),
-     cex.axis=1.5,cex.lab=2)
+     cex.axis=1.5,cex.lab=2,las=2)
 legend("topleft",c("pcc","mrnet","clr"),lty=c(1,1,1),
        col=c("black","red","blue"),lwd=2,cex=1.5) 
-# export pdf as 10*9
+
 
 # plot as points
 par(mar=c(7,6,3,1))
@@ -105,14 +106,14 @@ pcc <- result_pp$pcc
 mrnet <- result_pp$mrnet
 clr <- result_pp$clr
 
-# export pdf as 10*9
+# export pdf as svg 600*600
 par(mar=c(6,6,3,1))
 plot(pcc,type="b",col="black",xaxt="n",ylim=c(0.5,0.63), main="",
-     ylab="mean AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
+     ylab="average AUC",xlab="network",lwd=2.5,cex.axis =1.5,cex.lab=1.5)
 lines(mrnet,type="b",col="red",lwd=2.5)
 lines(clr,type="b",col="blue",lwd=2.5)
 axis(1, at=1:10, labels=c(12,36,65,108,270,404,1266,"six","all","protein"),
-     cex.axis=1.5,cex.lab=2)
+     cex.axis=1.5,cex.lab=2,las=2)
 legend("topleft",c("pcc","mrnet","clr"),lty=c(1,1,1),
        col=c("black","red","blue"),lwd=2,cex=1.5)
 
