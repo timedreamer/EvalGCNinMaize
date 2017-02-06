@@ -96,3 +96,10 @@ entrez_search(db="gds",
 
 # 1022, 1655, 1283, 1241, 1100, 1273,1216, 1015, 802
 # from 2008 to 2016
+
+
+
+
+year <- 2008:2016
+sra_arabidopsis <- sapply(year, search_year_sra, term="(Populus[ORGN] OR Populus trichocarpa[ORGN]) AND RNA-Seq[STRA] AND illumina[PLAT]",
+                    USE.NAMES=FALSE)
