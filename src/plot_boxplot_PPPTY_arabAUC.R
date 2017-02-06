@@ -53,20 +53,21 @@ boxplot(total_pcc~total_name_pcc,col=c("white","grey"),
         outcol="grey",whiskcol="grey",staplecol="grey",cex.axis=2,
         names=c("1363","all_rank"));box(lwd=2)
 points(mean_pcc,col="black",pch=8)
-
+abline(h=0.560484,lty=2)
 
 boxplot(total_mrnet~total_name_mrnet,main="PP_MRNET",las=2,ylim=c(0.4,0.8),
         col=c("white","grey"),
         outcol="grey",whiskcol="grey",staplecol="grey",cex.axis=2,
         names=c("1363","all_rank"));box(lwd=2)
 points(mean_mrnet,col="black",pch=8)
+abline(h=0.521885,lty=2)
 
 boxplot(total_clr~total_name_clr,main="PP_CLR",las=2,ylim=c(0.4,0.8),
         col=c("white","grey"),
         outcol="grey",whiskcol="grey",staplecol="grey",cex.axis=2,
         names=c("1363","all_rank"));box(lwd=2)
 points(mean_clr,col="black",pch=8)
-
+abline(h=0.522989,lty=2)
 
 # Plot everything together in boxplot .export as svg, 500*600
 total_value <- c(total_pcc,total_mrnet,total_clr)
