@@ -90,7 +90,7 @@ boxplot(total_value~total_constructMethod*total_netname,las=2,yaxt="n",
         outcol="grey",whiskcol="grey",staplecol="grey",main="allNtwk")
 box(lwd=2);axis(2,cex.axis=1.5,las=1)
 points(mean_value_all,col="black",pch=8)
-
+abline(h=0.584079077,lty=2) # add average of all three methods
 
 ######################################################################
 #pairwise wilconxon test
