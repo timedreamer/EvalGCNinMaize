@@ -15,7 +15,7 @@ name3 <- upGenes$Gene
 
 
 setwd("C:\\WORK\\EvalGCNinMaize\\data\\hda101_rank")
-hda101_vst_gcc <- read.delim("hda101.vstclr",header=F,sep='\t')
+hda101_vst_gcc <- read.delim("hda101.rpkmclr",header=F,sep='\t')
 # result without sorting is the same as sorting.
 
 rownames(hda101_vst_gcc) <- hda101_vst_gcc[,1]
