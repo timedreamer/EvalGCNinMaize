@@ -21,7 +21,6 @@ result_go <- result_go[-3,]
 result_hda <- read.delim("fouMethod_HDA101_AUC.txt",sep="\t",header=T)
 rownames(result_hda) <- result_hda[,1]
 result_hda[,1] <- NULL
-result_hda <- result_hda[-3,]
 ###PP_PTY
 
 # Plot individual AUC result by Normalization method, show diff between
@@ -30,22 +29,22 @@ result_hda <- result_hda[-3,]
 
 par(mfrow=c(3,3),mar=c(7,6,4,1))
 barplot(as.matrix(result_pp[1,]),main="VST",xpd=F,las=2,
-        ylim=c(0.4,0.6),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+        ylim=c(0.4,0.62),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
 abline(h=min(result_pp[1,]),lty=2);abline(h=max(result_pp[1,]),lty=3)
 
 barplot(as.matrix(result_pp[2,]),main="CPM",xpd=F,las=2,
-        ylim=c(0.4,0.6),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+        ylim=c(0.4,0.62),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
 abline(h=min(result_pp[2,]),lty=2);abline(h=max(result_pp[2,]),lty=3)
 
 barplot(as.matrix(result_pp[3,]),main="RPKM",xpd=F,las=2,
-        ylim=c(0.4,0.6),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
+        ylim=c(0.4,0.62),lwd=2.5,cex.axis = 2,cex.names = 2,col=c(rep("grey",9)))
 abline(h=min(result_pp[3,]),lty=2);abline(h=max(result_pp[3,]),lty=3)
 
 ###GO
 
 # Plot individual AUC result by Normalization method, show diff between
 # Correlation and MI
-# export as pdf 10*7
+# export as svg 800*800
 
 ####Plot individually, Show diff in Correlation and MI
 #par(mfrow=c(1,3),mar=c(7,6,4,1))
@@ -83,7 +82,7 @@ abline(h=min(result_hda[3,]),lty=2);abline(h=max(result_hda[3,]),lty=3)
 
 # Plot individual AUC result by Correlation and MI
 # show similar between normalization method
-#export pdf 8*8
+#export svg 800*800
 
 
 par(mfrow=c(3,3))
@@ -118,7 +117,7 @@ barplot(as.matrix(t(result_pp[,9])),main="CLR",names.arg = c("VST","CPM","RPKM")
 
 # Plot individual AUC result by Correlation and MI
 # show similar between normalization method
-#export pdf 8*8
+#export svg 800*800
 
 par(mfrow=c(3,3))
 barplot(as.matrix(t(result_go[,1])),main="PCC",names.arg = c("VST","CPM","RPKM"),
