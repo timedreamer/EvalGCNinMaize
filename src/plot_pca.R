@@ -45,7 +45,6 @@ p_noColor + labs(x = "PC1(28%)",y="PC2(14.6%)") + theme(axis.title=element_text(
 
 #PCA for PPPTY and GO evaluation
 setwd("C:\\WORK\\EvalGCNinMaize\\data\\AUC_rank\\maize\\methods")
-setwd("C:\\WORK\\EvalGCNinMaize\\data\\AUC_rank\\maize\\indi")
 vst <- read.table("maize_vst_1266_allGOMatrix.txt",sep="\t",header=T)
 cpm <- read.table("maize_cpm_1266_allGOMatrix.txt",sep="\t",header=T)
 rpkm <- read.table("maize_rpkm_1266_allGOMatrix.txt",sep="\t",header=T)
@@ -53,12 +52,6 @@ rpkm <- read.table("maize_rpkm_1266_allGOMatrix.txt",sep="\t",header=T)
 vst_p <- read.table("maize_vst_1266_allPPPTYMatrix__nullDelete.txt",sep="\t",header=T)
 cpm_p <- read.table("maize_cpm_1266_allPPPTYMatrix_nullDelete.txt",sep="\t",header=T)
 rpkm_p <- read.table("maize_rpkm_1266_allPPPTYMatrix_nullDelete.txt",sep="\t",header=T)
-
-
-# Draw by default R plot
-fit <- prcomp(t(vst),scale. = T,retx =T)
-# this is how calculate the percentage of each principle.
-percentVar <- round(100*fit$sdev^2/sum(fit$sdev^2),1)
 
 
 pcPlotGO <- function(name) {
@@ -87,5 +80,3 @@ pcPlotPPPTY <- function(name) {
 par(mfrow=c(2,3))
 pcPlotGO(vst);pcPlotGO(cpm);pcPlotGO(rpkm)
 pcPlotPPPTY(vst_p);pcPlotPPPTY(cpm_p);pcPlotPPPTY(rpkm_p)
-
-
