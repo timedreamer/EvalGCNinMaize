@@ -43,7 +43,7 @@ p_noColor + labs(x = "PC1(28%)",y="PC2(14.6%)") + theme(axis.title=element_text(
 
 ######################################################################
 
-#PCA for PPPTY and GO evaluation
+#PCA for PPPTY and GO evaluation METHODS
 setwd("C:\\WORK\\EvalGCNinMaize\\data\\AUC_rank\\maize\\methods")
 vst <- read.table("maize_vst_1266_allGOMatrix.txt",sep="\t",header=T)
 cpm <- read.table("maize_cpm_1266_allGOMatrix.txt",sep="\t",header=T)
@@ -80,3 +80,30 @@ pcPlotPPPTY <- function(name) {
 par(mfrow=c(2,3))
 pcPlotGO(vst);pcPlotGO(cpm);pcPlotGO(rpkm)
 pcPlotPPPTY(vst_p);pcPlotPPPTY(cpm_p);pcPlotPPPTY(rpkm_p)
+
+##########################################################################
+##PCA FOR INDI samples. using CPM and four methods.
+setwd("C:\\WORK\\EvalGCNinMaize\\data\\AUC_rank\\maize\\indi")
+
+allgo <- read.table("all_GO_indi.txt",sep="\t",header = T)
+method <- as.factor(all[,1])
+m <- as.factor(c("pcc","scc","mrnet","clr"))
+
+fit <- prcomp(allgo[,-c(1,2)],scale. = T,retx =T)
+percentVar <- round(100*fit$sdev^2/sum(fit$sdev^2),1)
+plot(fit$x[,1],fit$x[,2],xlab=paste0("PC1, VarExp:", round(percentVar[1],4)),
+     ylab = paste0("PC2, VarExp:", round(percentVar[2],4)),pch=19,
+     main=paste("PCA_GO"),col=method)
+legend("topleft", legend =m ,col=m, pch=19)
+text(fit$x[,1], fit$x[,2], allgo[,2], pos= 3,cex=0.8)
+
+pcc <- subset(allgo,allgo$method == "pcc")
+pcc$average <- apply(pcc[3:279],1,mean)
+pcc$average
+scc <- subset(allgo,allgo$method == "scc");scc$average <- apply(scc[3:279],1,mean)
+mrnet <- subset(allgo,allgo$method == "mrnet");mrnet$average <- apply(mrnet[3:279],1,mean)
+clr <- subset(allgo,allgo$method == "clr");clr$average <- apply(clr[3:279],1,mean)
+plot(pcc)
+lines(mrnet$average,type="b",col="red",lwd=2.5)
+lines(scc$average,type="b",col="green",lwd=2.5)
+lines(clr$average,type="b",col="blue",lwd=2.5)

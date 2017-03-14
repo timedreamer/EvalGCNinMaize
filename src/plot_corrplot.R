@@ -3,7 +3,7 @@
 # the graph is without legend, delete one of "gudie=F" and draw one graph to
 # retain the legend.
 # multiplot() function attach in the end
-
+library(reshape2)
 
 # correlation map for CPM
 cpm_go <- read.table("maize_cpm_1266_allGOMatrix.txt",sep="\t",header=T)
@@ -24,12 +24,12 @@ p1 <- ggplot(corData, aes(x=Var1, y=Var2, fill=value)) +geom_tile() + xlab("") +
   scale_fill_gradient2(low = "navyblue", high = "red", mid = "white",midpoint = 0.5,
                        guide=F,limit = c(0,1), space = "Lab") + 
   theme(text = element_text(size=20),
-        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("CPM_GO") 
+        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("CPM GO") 
 p2 <- ggplot(corData2, aes(x=Var1, y=Var2, fill=value)) +geom_tile() + xlab("") + ylab("") + 
   scale_fill_gradient2(low = "navyblue", high = "red", mid = "white",midpoint = 0.5,
                        guide=F,limit = c(0,1), space = "Lab") + 
   theme(text = element_text(size=20),
-        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("CPM_PPPTY")
+        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("CPM PPPTY")
 
 # get_upper_tri<-function(cormat){
 #   cormat[upper.tri(cormat)] <- NA
@@ -43,12 +43,12 @@ p3 <- ggplot(corData, aes(x=Var1, y=Var2, fill=value)) +geom_tile() + xlab("") +
   scale_fill_gradient2(low = "navyblue", high = "red", mid = "white",midpoint = 0.5, 
                        guide=F,limit = c(0,1), space = "Lab") + 
   theme(text = element_text(size=20),
-        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("VST_GO") 
+        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("VST GO") 
 p4 <- ggplot(corData2, aes(x=Var1, y=Var2, fill=value)) +geom_tile() + xlab("") + ylab("") + 
   scale_fill_gradient2(low = "navyblue", high = "red", mid = "white",midpoint = 0.5, 
                        guide=F,limit = c(0,1), space = "Lab") + 
   theme(text = element_text(size=20),
-        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("VST_PPPTY")
+        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("VST PPPTY")
 
 corData <- melt(cor(rpkm_go,method = 'p'))
 corData2 <- melt(cor(rpkm_pppty,method = 'p'))
@@ -56,15 +56,16 @@ p5 <- ggplot(corData, aes(x=Var1, y=Var2, fill=value)) +geom_tile() + xlab("") +
   scale_fill_gradient2(low = "navyblue", high = "red", mid = "white",midpoint = 0.5, 
                        guide=F,limit = c(0,1), space = "Lab") + 
   theme(text = element_text(size=20),
-        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("RPKM_GO") 
+        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("RPKM GO") 
 p6 <- ggplot(corData2, aes(x=Var1, y=Var2, fill=value)) +geom_tile() + xlab("") + ylab("") + 
   scale_fill_gradient2(low = "navyblue", high = "red", mid = "white",midpoint = 0.5,
                        guide=F,limit = c(0,1), space = "Lab") + 
   theme(text = element_text(size=20),
-        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("RPKM_PPPTY") 
+        axis.text.x=element_text(angle = 90, hjust = 0)) + ggtitle("RPKM PPPTY") 
 
+png("correplot.png", units = "px", width=4000, height=3000, res=300)
 multiplot(p1,p2,p3,p4,p5,p6,cols =3 )
-
+dev.off()
 # Multiple plot function
 #
 # ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)

@@ -18,9 +18,26 @@ result_go[,1] <- NULL
 result_go <- result_go[-3,]
 
 # HDA101
+# plot togehter with "plot_boxplot_method.R" 
+# export as 500*800 SVG
+par(mfrow=c(1,2))
 result_hda <- read.delim("fouMethod_HDA101_AUC.txt",sep="\t",header=T)
 rownames(result_hda) <- result_hda[,1]
 result_hda[,1] <- NULL
+
+result_hda$avg <- apply(result_hda,1,mean)
+
+barplot(result_hda$avg,main="HDA101 Normalization",xpd=F,las=2,cex.names = 1.5,
+        ylim=c(0.2,1),lwd=2.5,cex.axis = 1.5,names.arg=c("VST","CPM","RPKM"));box(lwd=2)
+abline(h=min(result_hda$avg),lty=2);abline(h=max(result_hda$avg),lty=2);
+
+result_hda[4,] <-  apply(result_hda,2,mean)
+m <- unlist(result_hda[4,c(1:9)])
+barplot(m,main="HDA101 Inference",xpd=F,las=2,cex.names = 1.5,
+        ylim=c(0.2,1),lwd=2.5,cex.axis = 1.5,names.arg = c("PCC","SCC","KCC",
+                                                         "GCC","BIC","AA","MA",
+                                                         "MRNET","CLR") );box(lwd=2)
+abline(h=min(m),lty=2);abline(h=max(m),lty=2);
 ###PP_PTY
 
 # Plot individual AUC result by Normalization method, show diff between

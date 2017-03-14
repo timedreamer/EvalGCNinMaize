@@ -35,7 +35,7 @@ search_year_sra <- function(year, term){
 year <- 2008:2015
 sra_maize <- sapply(year, search_year_sra, term="(Zea mays[ORGN] OR maize[ORGN]) AND RNA-Seq[STRA] AND illumina[PLAT]",
                  USE.NAMES=FALSE)
-
+sum(sra_maize)
 
 # Final result. year 2008-2015.2007-geo:88;2006-geo:1; previous year 0.[GPL4032 Only]
 geo_maize <- c(177,26,95,108,60,34,69,14)
@@ -58,9 +58,9 @@ geo_maize;sra_maize
 
 geo_total <- 718 # plus GPL12620 is 900
 
-geo_total <- 900
+geo_total <- sum(geo_maize)
 
-sra_total <- 5056
+sra_total <- sum(sra_maize)
 c_total <- c(geo_total,sra_total)
 names(c_total) <- c("Microarray","RNA-Seq")
 
@@ -69,7 +69,7 @@ par(mar=c(6,10,10,6))
 barplot(c_total,col="black",main="Total maize RNA-Seq vs Microarray",xaxt="n",
         ylab="number of samples",cex.main=2.5,cex.lab=1.5,cex.axis=1.5,cex.names = 2,
         ylim=c(0,6000))
-axis(1, at=1:2, labels=c("Microarray","RNA-Seq"),cex.axis=1.5,cex.lab=2)
+axis(1, at=1:2, labels=c("Microarray","RNA-Seq"),cex.axis=1.2,las=2)
 
 
 
