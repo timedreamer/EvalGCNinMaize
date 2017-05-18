@@ -21,7 +21,7 @@ entrez_search(db="sra",
 # Search one year of GEO DataSet(GDS).
 # GPL4032(Affy);GPL12620(Nimblegen)
 entrez_search(db="gds",
-              term="(GPL4032[ACCN] OR GPL12620[ACCN]) AND 2015[PDAT]",
+              term="(GPL4032[ACCN] OR GPL12620[ACCN]) AND 2016[PDAT]",
               retmax=0)
 
 
@@ -32,7 +32,7 @@ search_year_sra <- function(year, term){
 }
 
 
-year <- 2008:2015
+year <- 2008:2016
 sra_maize <- sapply(year, search_year_sra, term="(Zea mays[ORGN] OR maize[ORGN]) AND RNA-Seq[STRA] AND illumina[PLAT]",
                  USE.NAMES=FALSE)
 sum(sra_maize)
@@ -40,8 +40,8 @@ sum(sra_maize)
 # Final result. year 2008-2015.2007-geo:88;2006-geo:1; previous year 0.[GPL4032 Only]
 geo_maize <- c(177,26,95,108,60,34,69,14)
 # Both GPL4032 and GPL12620
-geo_maize <- c(177,26,95,290,60,34,69,14)
-sra_maize <- c(0,6,9,31,460,524,811,2389)
+geo_maize <- c(177,26,95,290,60,34,69,14,46)
+sra_maize <- c(0,6,9,31,460,524,811,2389,925)
 
 
 # export as svg 600*600
@@ -49,7 +49,7 @@ par(mar=c(6,6,3,1))
 plot(sra_maize,type="b",col="black",xaxt="n",ylim=c(0,2500), main="Maize RNA-Seq vs Microarray Samples",
      ylab="number of samples",xlab="year",lwd=2.5,cex.axis =1.5,cex.lab=1.5,cex.main=2)
 lines(geo_maize,type="b",col="black",lty=2,lwd=2.5)
-axis(1, at=1:8, labels=c(2008:2015),cex.axis=1.5,cex.lab=2,las=2)
+axis(1, at=1:9, labels=c(2008:2016),cex.axis=1.5,cex.lab=1.5,las=2)
 legend("left",c("RNA-Seq","Microarray"),lty=c(1,2),lwd=c(2.5,2.5))
 
 
@@ -67,7 +67,7 @@ names(c_total) <- c("Microarray","RNA-Seq")
 # export as svg 600*600
 par(mar=c(6,10,10,6))
 barplot(c_total,col="black",main="Total maize RNA-Seq vs Microarray",xaxt="n",
-        ylab="number of samples",cex.main=2.5,cex.lab=1.5,cex.axis=1.5,cex.names = 2,
+        ylab="number of samples",cex.main=1,cex.lab=1.5,cex.axis=1.5,cex.names = 2,
         ylim=c(0,6000))
 axis(1, at=1:2, labels=c("Microarray","RNA-Seq"),cex.axis=1.2,las=2)
 
@@ -103,3 +103,28 @@ entrez_search(db="gds",
 year <- 2008:2016
 sra_arabidopsis <- sapply(year, search_year_sra, term="(Populus[ORGN] OR Populus trichocarpa[ORGN]) AND RNA-Seq[STRA] AND illumina[PLAT]",
                     USE.NAMES=FALSE)
+
+
+
+entrez_dbs()
+entrez_db_searchable("pubmed")
+
+r_search <- entrez_search(db="pubmed", term="co-expression")
+r_search
+
+
+# use function and sapply to calculate year 2008-2015
+search_year_pubmed <- function(year, term){
+  query <- paste(term, "AND (", year, "[PDAT])")
+  entrez_search(db="pubmed", term=query, retmax=0)$count
+}
+
+year <- 2000:2016
+sra_maize <- sapply(year, search_year_pubmed, term="(Co-expression[ALL] 
+                    OR co-expression[ALL] OR GCN[TITL])",USE.NAMES=FALSE)
+
+# export as svg 600*600
+par(mar=c(6,6,3,1))
+plot(sra_maize,type="b",col="black",xaxt="n",ylim=c(0,1400),
+     ylab="number of samples",xlab="year",lwd=2.5,cex.axis =1.5,cex.lab=1.5,cex.main=2,las=1)
+axis(1, at=1:17, labels=c(2000:2016),cex.axis=1.5,cex.lab=1.5,las=2)
